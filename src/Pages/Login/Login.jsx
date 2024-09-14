@@ -1,8 +1,258 @@
+// import React, { useState } from "react";
+// import {
+//   Box,
+//   Button,
+//   Divider,
+//   TextField,
+//   Typography,
+//   Link,
+//   Stack,
+//   AppBar,
+//   Toolbar,
+//   useTheme,
+//   useMediaQuery,
+// } from "@mui/material";
+// import { FcGoogle } from "react-icons/fc";
+// import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
+// import Logo from "./logo.png";
+// import LokSevaAayugLogo from "./loksevaaayug.png";
+// import { useNavigate } from "react-router-dom";
+
+// const LoginCard = () => {
+//   const [email, setEmail] = useState(""); // State for email input
+//   const [password, setPassword] = useState(""); // State for password input
+//   const [showPassword, setShowPassword] = useState(false); // State to show/hide password
+//   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+//   const [open, setOpen] = useState(false);
+
+//   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md")); // Detect mobile screens
+
+//   const toggleDrawer = () => {
+//     setOpen(!open);
+//   };
+
+//   const navigate = useNavigate();
+
+//   const togglePasswordVisibility = () => {
+//     setShowPassword(!showPassword);
+//   };
+
+//   const handleLogin = async () => {
+//     // Perform API call to login
+//     try {
+//       const response = await fetch("http://localhost:5001/api/login", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           email: email,
+//           password: password,
+//         }),
+//       });
+
+//       const data = await response.json();
+
+//       if (response.ok) {
+//         // Login successful
+//         console.log("Login successful", data);
+
+//         // Store JWT token (if required)
+//         localStorage.setItem("token", data.token);
+
+//         // Navigate to management page
+//         navigate("/management");
+//       } else {
+//         // Handle login error
+//         setErrorMessage(data.message || "Invalid login credentials");
+//       }
+//     } catch (error) {
+//       console.error("Error during login", error);
+//       setErrorMessage("An error occurred during login. Please try again.");
+//     }
+//   };
+
+//   return (
+//     <Stack>
+//       <AppBar
+//         sx={{
+//           backgroundColor: "white",
+//           display: { xl: "flex" },
+//           flexDirection: { xl: "row", lg: "row" },
+//           justifyContent: { xl: "center", lg: "center", md: "column" },
+//         }}
+//       >
+//         <Toolbar
+//           sx={{
+//             display: "flex",
+//             justifyContent: "space-between",
+//             width: { xl: "70%", lg: "80%" },
+//           }}
+//         >
+//           <Stack
+//             sx={{
+//               height: { lg: "30px", xl: "36", sm: "28px", xs: "28px" },
+//               width: { lg: "120px", xl: "198px", sm: "28px", xs: "28px" },
+//               display: "flex",
+//               flexDirection: "row",
+//             }}
+//           >
+//             <Typography sx={{ color: "black" }}>
+//               <img src={LokSevaAayugLogo} alt="logo" /> Chhattisgarh Public
+//               Service Commission
+//             </Typography>
+//           </Stack>
+//         </Toolbar>
+//       </AppBar>
+
+//       <Box
+//         sx={{
+//           maxWidth: 400,
+//           mx: "auto",
+//           p: 4,
+//           mt: 5,
+//           boxShadow: 3,
+//           borderRadius: 2,
+//           marginTop: { lg: "10%", xl: "10%", xs: "124px", sm: "224px" },
+//           backgroundColor: "white",
+//         }}
+//       >
+//         <Stack
+//           sx={{
+//             display: "flex",
+//             justifyContent: "center",
+//             alignItems: "center",
+//             paddingBottom: "10px",
+//           }}
+//         >
+//           <img
+//             src={LokSevaAayugLogo}
+//             alt="logo"
+//             style={{ height: "80px", width: "80px" }}
+//           />
+//         </Stack>
+
+//         {/* Display error message if login fails */}
+//         {errorMessage && (
+//           <Typography color="error" align="center">
+//             {errorMessage}
+//           </Typography>
+//         )}
+
+//         <Stack>
+//           <Typography
+//             sx={{
+//               color: "rgb(100, 116, 139)",
+//               fontSize: { lg: "18px", sm: "16px" },
+//               fontWeight: "400",
+//             }}
+//           >
+//             Email Id:
+//           </Typography>
+//           <TextField
+//             variant="outlined"
+//             fullWidth
+//             sx={{ mb: 3, borderRadius: 2 }}
+//             placeholder="Enter your email id"
+//             size="small"
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//           />
+//         </Stack>
+
+//         <Box sx={{ position: "relative", mb: 3 }}>
+//           <Stack>
+//             <Typography
+//               sx={{
+//                 color: "rgb(100, 116, 139)",
+//                 fontSize: { lg: "18px", sm: "16px" },
+//                 fontWeight: "400",
+//               }}
+//             >
+//               Password:
+//             </Typography>
+//             <TextField
+//               variant="outlined"
+//               fullWidth
+//               type={showPassword ? "text" : "password"}
+//               placeholder="Enter your password"
+//               sx={{ borderRadius: 2 }}
+//               size="small"
+//               value={password}
+//               onChange={(e) => setPassword(e.target.value)}
+//             />
+//           </Stack>
+//           <Box
+//             onClick={togglePasswordVisibility}
+//             sx={{
+//               position: "absolute",
+//               top: "70%",
+//               right: 10,
+//               transform: "translateY(-50%)",
+//               cursor: "pointer",
+//             }}
+//           >
+//             {showPassword ? <HiOutlineEyeOff /> : <HiOutlineEye />}
+//           </Box>
+//         </Box>
+
+//         <Box sx={{ textAlign: "right", mb: 3 }}>
+//           <Link href="#" underline="none" sx={{ color: "#6ec290" }}>
+//             Forgot Password?
+//           </Link>
+//         </Box>
+
+//         <Button
+//           variant="contained"
+//           fullWidth
+//           sx={{
+//             mb: 3,
+//             textTransform: "none",
+//             borderRadius: 2,
+//             backgroundColor: "#6ec290",
+//           }}
+//           size="large"
+//           onClick={handleLogin}
+//         >
+//           Login
+//         </Button>
+
+//         <Typography
+//           align="center"
+//           variant="body2"
+//           sx={{
+//             fontSize: { lg: "18px", sm: "16px" },
+//             fontWeight: "500",
+//             lineHeight: { lg: "28px", sm: "26px" },
+//             color: "rgb(148, 163, 184)",
+//           }}
+//         >
+//           Don't have a account yet?{" "}
+//           <Link
+//             href="#"
+//             sx={{
+//               color: "#6ec290",
+//               textDecoration: "none",
+//               "&:hover": {
+//                 textDecoration: "underline",
+//                 textDecorationColor: "black",
+//               },
+//             }}
+//           >
+//             Sign up
+//           </Link>
+//         </Typography>
+//       </Box>
+//     </Stack>
+//   );
+// };
+
+// export default LoginCard;
+
 import React, { useState } from "react";
 import {
   Box,
   Button,
-  Divider,
   TextField,
   Typography,
   Link,
@@ -12,37 +262,48 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { FcGoogle } from "react-icons/fc";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
-import Logo from "./logo.png";
-import { MdMenu } from "react-icons/md";
-import { IoChevronDown, IoPersonSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import LokSevaAayugLogo from "./loksevaaayug.png";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 const LoginCard = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [email, setEmail] = useState(""); // State for email input
+  const [password, setPassword] = useState(""); // State for password input
+  const [showPassword, setShowPassword] = useState(false); // State to show/hide password
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+
+  const theme = useTheme(); // Get the theme object
+  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Detect mobile screens
+
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [slideDirection, setSlideDirection] = useState("right");
-  const theme = useTheme();
-  const isLgOrXl = useMediaQuery(theme.breakpoints.up("lg"));
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-  const handleMobileMenuOpen = () => {
-    setSlideDirection("right");
-    setMobileMenuOpen(true);
-  };
+      const data = await response.json();
 
-  const handleMobileMenuClose = () => {
-    setSlideDirection("left");
-    setMobileMenuOpen(false);
-  };
-  const navigate = useNavigate();
-  const handleLoginClick = () => {
-    navigate("/login");
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        navigate("/management");
+      } else {
+        setErrorMessage(data.message || "Invalid login credentials");
+      }
+    } catch (error) {
+      console.error("Error during login", error);
+      setErrorMessage("An error occurred during login. Please try again.");
+    }
   };
 
   return (
@@ -53,7 +314,6 @@ const LoginCard = () => {
           display: { xl: "flex" },
           flexDirection: { xl: "row", lg: "row" },
           justifyContent: { xl: "center", lg: "center", md: "column" },
-          //   border: "1px solid red",
         }}
       >
         <Toolbar
@@ -63,73 +323,36 @@ const LoginCard = () => {
             width: { xl: "70%", lg: "80%" },
           }}
         >
-          <Stack
-            sx={{
-              height: { lg: "30px", xl: "36", sm: "28px", xs: "28px" },
-              width: { lg: "120px", xl: "198px", sm: "140px", xs: "140px" },
-            }}
-          >
-            <img src={Logo} alt="logo" />
+          <Stack>
+            <GiHamburgerMenu color="green" size={32} />
           </Stack>
           <Stack
             sx={{
+              height: { sm: "40px", xs: "40px" },
+              width: { sm: "100%", xs: "100%" },
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
             }}
           >
             <Typography
-              color={"black"}
               sx={{
-                fontSize: {
-                  lg: "18px",
-                  xl: "18px",
-                  sm: "12px",
-                  xs: "12px",
-                },
-                color: "rgb(148, 163, 184)",
-                fontWeight: "500",
-                marginTop: {
-                  lg: "8px",
-                  xl: "8px",
-                  sm: "4px",
-                  xs: "4px",
-                },
-                marginRight: {
-                  lg: "8px",
-                  xl: "8px",
-                  sm: "8px",
-                  xs: "8px",
-                },
-              }}
-            >
-              Not a user ?
-            </Typography>
-            <Button
-              variant="outlined"
-              sx={{
-                marginRight: "8px",
-                display: "flex",
+                color: "black",
+                // border: "1px solid red",
+                display: " flex",
+                flexDirection: "row",
+                justifyContent: "center",
                 alignItems: "center",
-                height: { lg: "42px", xl: "42px", sm: "28px", xs: "28px" },
-                width: { lg: "142px", xl: "142px", sm: "80px", xs: "80px" },
-                fontSize: { lg: "12px", xl: "14px", sm: "8px", xs: "8px" },
-                // borderColor: "rgb(120, 106, 255)",
-                border: "none",
-                color: "rgb(120, 106, 255)",
-                backgroundColor: "rgb(244 240 255)",
-                "&:hover": {
-                  backgroundColor: "rgb(120, 106, 255)",
-                  color: "white",
-                  borderColor: "rgb(120, 106, 255)",
-                },
+                fontSize: { xs: "13px", sm: "16px" },
               }}
-             
-              onClick={handleLoginClick}
             >
-              {/* <IoPersonSharp style={{ marginRight: "8px" }} /> */}
-              Sign up
-            </Button>
+              <img
+                src={LokSevaAayugLogo}
+                alt="logo"
+                style={{ height: "32px", width: "32px", marginRight: "8px" }}
+              />{" "}
+              Chhattisgarh Public Service Commission
+            </Typography>
           </Stack>
         </Toolbar>
       </AppBar>
@@ -146,71 +369,27 @@ const LoginCard = () => {
           backgroundColor: "white",
         }}
       >
-        <Typography
-          variant="h5"
-          align="center"
-          gutterBottom
+        <Stack
           sx={{
-            fontSize: {
-              lg: "28px",
-              xl: "28px",
-              sm: "24px",
-              xs: "24px",
-            },
-            fontWeight: "700",
-            color: " rgb(30, 41, 59)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: "10px",
           }}
         >
-          Login to continue{" "}
-          <span role="img" aria-label="wave">
-            👋
-          </span>
-        </Typography>
+          <img
+            src={LokSevaAayugLogo}
+            alt="logo"
+            style={{ height: "80px", width: "80px" }}
+          />
+        </Stack>
 
-        <Button
-          variant="outlined"
-          startIcon={<FcGoogle />}
-          fullWidth
-          size="large"
-          sx={{ mb: 3, textTransform: "none", borderRadius: 2 }}
-        >
-          <Typography
-            sx={{
-              fontSize: {
-                lg: "18px",
-                xl: "18px",
-                sm: "14px",
-                xs: "14px",
-              },
-              fontWeight: "500",
-              color: "rgb(51, 65, 85)",
-            }}
-          >
-            Sign in with Google for Work
+        {errorMessage && (
+          <Typography color="error" align="center">
+            {errorMessage}
           </Typography>
-        </Button>
+        )}
 
-        <Divider
-          sx={{
-            mb: 3,
-            color: "rgb(100, 116, 139)",
-            fontWeight: "400",
-            fontSize: {
-              lg: "14px",
-              xl: "14px",
-              sm: "14px",
-              xs: "14px",
-            },
-            lineHeight: {
-              lg: "20px",
-              xl: "20px",
-              sm: "16px",
-              xs: "16px",
-            },
-          }}
-        >
-          Or continue with
-        </Divider>
         <Stack>
           <Typography
             sx={{
@@ -219,16 +398,19 @@ const LoginCard = () => {
               fontWeight: "400",
             }}
           >
-            Work Email
+            Email Id:
           </Typography>
           <TextField
-            //   label="Work Email"
             variant="outlined"
             fullWidth
             sx={{ mb: 3, borderRadius: 2 }}
+            placeholder="Enter your email id"
             size="small"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </Stack>
+
         <Box sx={{ position: "relative", mb: 3 }}>
           <Stack>
             <Typography
@@ -238,15 +420,17 @@ const LoginCard = () => {
                 fontWeight: "400",
               }}
             >
-              Your Password
+              Password:
             </Typography>
             <TextField
-              // label="Your Password"
               variant="outlined"
               fullWidth
               type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
               sx={{ borderRadius: 2 }}
               size="small"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </Stack>
           <Box
@@ -264,7 +448,7 @@ const LoginCard = () => {
         </Box>
 
         <Box sx={{ textAlign: "right", mb: 3 }}>
-          <Link href="#" underline="none" sx={{ color: "rgb(120, 106, 255)" }}>
+          <Link href="#" underline="none" sx={{ color: "#6ec290" }}>
             Forgot Password?
           </Link>
         </Box>
@@ -276,9 +460,10 @@ const LoginCard = () => {
             mb: 3,
             textTransform: "none",
             borderRadius: 2,
-            backgroundColor: "rgb(120, 106, 255)",
+            backgroundColor: "#6ec290",
           }}
           size="large"
+          onClick={handleLogin}
         >
           Login
         </Button>
@@ -293,11 +478,11 @@ const LoginCard = () => {
             color: "rgb(148, 163, 184)",
           }}
         >
-          Don't have a Mailmodo account yet?{" "}
+          Don't have an account yet?{" "}
           <Link
             href="#"
             sx={{
-              color: "rgb(120, 106, 255)",
+              color: "#6ec290",
               textDecoration: "none",
               "&:hover": {
                 textDecoration: "underline",
