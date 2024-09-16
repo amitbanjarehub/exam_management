@@ -50,7 +50,10 @@ const Management = () => {
       gender: "Male",
       age: 20,
       status: "Present",
-      action: "View",
+      action: "Verify",
+      address: "Sirsagate Bhilai Chhattisgarh",
+      dob: "09/12/1997",
+      room_no: "10",
     },
     {
       sNo: 2,
@@ -60,7 +63,10 @@ const Management = () => {
       gender: "Female",
       age: 21,
       status: "Present",
-      action: "View",
+      action: "Verify",
+      address: "Sirsagate Bhilai Chhattisgarh",
+      dob: "09/12/1997",
+      room_no: "10",
     },
     {
       sNo: 3,
@@ -70,7 +76,10 @@ const Management = () => {
       gender: "Female",
       age: 21,
       status: "Absent",
-      action: "View",
+      action: "Verify",
+      address: "Sirsagate Bhilai Chhattisgarh",
+      dob: "09/12/1997",
+      room_no: "10",
     },
     {
       sNo: 4,
@@ -80,7 +89,10 @@ const Management = () => {
       gender: "Female",
       age: 21,
       status: "Absent",
-      action: "View",
+      action: "Verify",
+      address: "Sirsagate Bhilai Chhattisgarh",
+      dob: "09/12/1997",
+      room_no: "10",
     },
     {
       sNo: 5,
@@ -90,7 +102,10 @@ const Management = () => {
       gender: "Female",
       age: 21,
       status: "Absent",
-      action: "View",
+      action: "Verify",
+      address: "Sirsagate Bhilai Chhattisgarh",
+      dob: "09/12/1997",
+      room_no: "10",
     },
   ];
 
@@ -110,6 +125,10 @@ const Management = () => {
 
   const toggleExpandCard = (sNo) => {
     setExpandedCard(expandedCard === sNo ? null : sNo);
+  };
+
+  const handleQrSacnner = () => {
+    navigate("/scanner");
   };
 
   return (
@@ -260,21 +279,38 @@ const Management = () => {
               }}
             >
               Absent
-
-              
             </Button>
           </ButtonGroup>
         </Grid>
 
         <Grid container justifyContent="center" mb={2} sx={{ width: "100%" }}>
-          <TextField
-            variant="outlined"
-            label="Search by........"
-            size="small"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            fullWidth
-          />
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <TextField
+              variant="outlined"
+              label="Search by........"
+              size="small"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              sx={{ marginRight: "8px" }}
+              fullWidth
+            />
+
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ backgroundColor: "rgb(120, 106, 255)", width: "20px" }}
+              onClick={handleQrSacnner}
+            >
+              Scan
+            </Button>
+          </Stack>
         </Grid>
 
         <Grid container spacing={2}>
@@ -328,56 +364,111 @@ const Management = () => {
 
                     {/* Conditionally render the second grid based on card expansion */}
                     {expandedCard === row.sNo && (
-                      <Grid container spacing={1}>
-                        <Grid item xs={4}>
-                          <Stack
-                            direction="column"
-                            alignItems="center"
-                            spacing={1}
-                          >
-                            <Typography
-                              sx={{ fontSize: "12px", fontWeight: "bold" }}
+                      <>
+                        <Grid container spacing={1}>
+                          <Grid item xs={4}>
+                            <Stack
+                              direction="column"
+                              alignItems="center"
+                              spacing={1}
                             >
-                              Gender:
-                            </Typography>
-                            <Typography sx={{ fontSize: "12px" }}>
-                              {row.gender}
-                            </Typography>
-                          </Stack>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <Stack
-                            direction="column"
-                            alignItems="center"
-                            spacing={1}
-                          >
-                            <Typography
-                              sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              <Typography
+                                sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              >
+                                Gender:
+                              </Typography>
+                              <Typography sx={{ fontSize: "12px" }}>
+                                {row.gender}
+                              </Typography>
+                            </Stack>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Stack
+                              direction="column"
+                              alignItems="center"
+                              spacing={1}
                             >
-                              Status:
-                            </Typography>
-                            <Typography sx={{ fontSize: "12px" }}>
-                              {row.status}
-                            </Typography>
-                          </Stack>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <Stack
-                            direction="column"
-                            alignItems="center"
-                            spacing={1}
-                          >
-                            <Typography
-                              sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              <Typography
+                                sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              >
+                                Status:
+                              </Typography>
+                              <Typography sx={{ fontSize: "12px" }}>
+                                {row.status}
+                              </Typography>
+                            </Stack>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Stack
+                              direction="column"
+                              alignItems="center"
+                              spacing={1}
                             >
-                              Age
-                            </Typography>
-                            <Typography sx={{ fontSize: "12px" }}>
-                              {row.age}
-                            </Typography>
-                          </Stack>
+                              <Typography
+                                sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              >
+                                Age
+                              </Typography>
+                              <Typography sx={{ fontSize: "12px" }}>
+                                {row.age}
+                              </Typography>
+                            </Stack>
+                          </Grid>
                         </Grid>
-                      </Grid>
+
+                        <Grid container spacing={1}>
+                          <Grid item xs={4}>
+                            <Stack
+                              direction="column"
+                              alignItems="center"
+                              spacing={1}
+                            >
+                              <Typography
+                                sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              >
+                                Address:
+                              </Typography>
+                              <Typography
+                                sx={{ fontSize: "12px", textAlign: "center" }}
+                              >
+                                {row.address}
+                              </Typography>
+                            </Stack>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Stack
+                              direction="column"
+                              alignItems="center"
+                              spacing={1}
+                            >
+                              <Typography
+                                sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              >
+                                DOB:
+                              </Typography>
+                              <Typography sx={{ fontSize: "12px" }}>
+                                {row.dob}
+                              </Typography>
+                            </Stack>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Stack
+                              direction="column"
+                              alignItems="center"
+                              spacing={1}
+                            >
+                              <Typography
+                                sx={{ fontSize: "12px", fontWeight: "bold" }}
+                              >
+                                Room/Hall No.
+                              </Typography>
+                              <Typography sx={{ fontSize: "12px" }}>
+                                {row.room_no}
+                              </Typography>
+                            </Stack>
+                          </Grid>
+                        </Grid>
+                      </>
                     )}
                   </Stack>
                   {expandedCard === row.sNo && (
