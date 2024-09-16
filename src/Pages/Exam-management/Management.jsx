@@ -150,7 +150,7 @@ const Management = () => {
     const fetchStudents = async () => {
       try {
         const response = await fetch(
-          "http://192.168.29.107:5001/api/all_students"        
+          "http://192.168.29.107:5001/api/all_students"
         );
         // console.log("Data232:========>>>", response);
         // Check if the response is OK (status 200)
@@ -369,9 +369,28 @@ const Management = () => {
                   <Stack spacing={2} sx={{ width: "100%", pl: 0 }}>
                     {/* First Grid: Logo, Exam Name, and Date */}
                     <Grid container spacing={1} sx={{ pl: "4px", pr: "4px" }}>
-                      <Grid item xs={4}  sx={{border: "1px solid red"}}>
+                      <Grid
+                        item
+                        xs={4}
+                        sx={{
+                          // border: "1px solid red",
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          width: 80,
+                          height: 80,
+                        }}
+                      >
                         <Avatar
-                          sx={{ width: 60, height: 60, marginLeft: "20px" }}
+                          sx={{
+                            width: 80,
+                            height: 80,
+                            // marginLeft: "20px",
+                            // border: "1px solid green",
+                            paddingBottom: "16px",
+                            marginBottom: "8px",
+                          }}
                           src={row.image}
                           alt={row.name}
                         />
