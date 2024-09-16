@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Box,
@@ -32,6 +32,12 @@ const Management = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedCard, setExpandedCard] = useState(null); // State to track expanded card
+
+  const [students, setStudents] = useState([]); // State to hold student data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+
+  console.log("studentsData:==========>>>", students);
 
   const navigate = useNavigate();
   const currentDay = new Date().toLocaleDateString("en-us", {
@@ -108,9 +114,17 @@ const Management = () => {
       room_no: "10",
     },
   ];
-
+  // https://robohash.org/elonmusk.png
   // Filter students based on status and search term
   const filteredRows = rows.filter((row) => {
+    const matchesStatus = filterStatus === "All" || row.status === filterStatus;
+    const matchesSearch =
+      row.rollNo.toString().includes(searchTerm) ||
+      row.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesStatus && matchesSearch;
+  });
+
+  const filteredRows1 = students.filter((row) => {
     const matchesStatus = filterStatus === "All" || row.status === filterStatus;
     const matchesSearch =
       row.rollNo.toString().includes(searchTerm) ||
@@ -130,6 +144,40 @@ const Management = () => {
   const handleQrSacnner = () => {
     navigate("/scanner");
   };
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchStudents = async () => {
+      try {
+        const response = await fetch(
+          "http://192.168.29.107:5001/api/all_students"        
+        );
+        // console.log("Data232:========>>>", response);
+        // Check if the response is OK (status 200)
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json(); // Parse the JSON data
+        setStudents(data); // Set the students data in the state
+        setLoading(false); // Set loading to false after data is fetched
+      } catch (err) {
+        setError(err.message); // Set the error message
+        setLoading(false); // Set loading to false even if there's an error
+      }
+    };
+
+    fetchStudents();
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
+
+  // Handle loading and error states
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <>
@@ -314,14 +362,14 @@ const Management = () => {
         </Grid>
 
         <Grid container spacing={2}>
-          {filteredRows.length > 0 ? (
-            filteredRows.map((row) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={row.sNo}>
-                <Card onClick={() => toggleExpandCard(row.sNo)}>
+          {filteredRows1.length > 0 ? (
+            filteredRows1.map((row) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={row._id}>
+                <Card onClick={() => toggleExpandCard(row._id)}>
                   <Stack spacing={2} sx={{ width: "100%", pl: 0 }}>
                     {/* First Grid: Logo, Exam Name, and Date */}
                     <Grid container spacing={1} sx={{ pl: "4px", pr: "4px" }}>
-                      <Grid item xs={4}>
+                      <Grid item xs={4}  sx={{border: "1px solid red"}}>
                         <Avatar
                           sx={{ width: 60, height: 60, marginLeft: "20px" }}
                           src={row.image}
@@ -363,7 +411,7 @@ const Management = () => {
                     </Grid>
 
                     {/* Conditionally render the second grid based on card expansion */}
-                    {expandedCard === row.sNo && (
+                    {expandedCard === row._id && (
                       <>
                         <Grid container spacing={1}>
                           <Grid item xs={4}>
@@ -471,7 +519,7 @@ const Management = () => {
                       </>
                     )}
                   </Stack>
-                  {expandedCard === row.sNo && (
+                  {expandedCard === row._id && (
                     <CardActions>
                       <Button
                         variant="contained"

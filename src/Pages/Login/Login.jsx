@@ -285,7 +285,7 @@ const LoginCard = () => {
   const handleLogin = async () => {
     try {
       const response = await fetch("http://192.168.29.107:5001/api/login", {
-      // const response = await fetch("http://localhost:5001/api/login", {
+      // const response = await fetch("https://amitbanjarehub.github.io/exam_management/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
