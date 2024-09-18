@@ -16,61 +16,381 @@ const ExamCard = () => {
         width: "100%",
       }}
     >
-      <Stack spacing={2} sx={{ width: "100%", pl: 0 }}>
-        {/* First Grid: Logo, Exam Name, and Date */}
-        <Grid container spacing={1} sx={{ pl: "4px", pr: "4px" }}>
-          <Grid item xs={4} sx={{  display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+      <Stack
+        // spacing={2}
+        sx={{ width: "100%", pl: 0, display: "flex", flexDirection: "row" }}
+      >
+        <Stack sx={{ width: "20%" }}>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "4px",
+            }}
+          >
             <Avatar
-              sx={{ width: 40, height: 40,  }}
+              sx={{ width: 60, height: 60 }}
               src={LokSevaAayugLogo}
               alt="logo"
             />
           </Grid>
-          <Grid item xs={4}>
-            <Stack direction="column" alignItems="center" spacing={1}>
-              <Typography sx={{ fontSize: "12px", fontWeight: "bold" }}>
-                Exam Name
+        </Stack>
+        {/* <Stack
+          sx={{
+            border: "1px solid green",
+            width: "80%",
+           
+          }}
+        >
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginBottom: "4px",
+              marginTop: "4px",
+            }}
+          >
+            <Stack
+              sx={{
+                border: "1px solid red",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
+              >
+                Exam Name:
               </Typography>
-              <Typography sx={{ fontSize: "12px" }}>TET</Typography>
             </Stack>
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="column" alignItems="center" spacing={1}>
-              <Typography sx={{ fontSize: "12px", fontWeight: "bold" }}>
-                Date
-              </Typography>
-              <Typography sx={{ fontSize: "12px" }}>09/14/2024</Typography>
-            </Stack>
-          </Grid>
-        </Grid>
 
-        {/* Second Grid: Start Time, End Time, and Countdown */}
-        <Grid container spacing={1}>
-          <Grid item xs={4}>
-            <Stack direction="column" alignItems="center" spacing={1}>
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid green",
+              }}
+            >
               <Typography sx={{ fontSize: "12px", fontWeight: "bold" }}>
-                Start Time
+                {"TET"}
               </Typography>
-              <Typography sx={{ fontSize: "12px" }}>10:00 AM</Typography>
             </Stack>
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="column" alignItems="center" spacing={1}>
+          </Stack>
+
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginBottom: "4px",
+            }}
+          >
+            <Stack
+              sx={{
+                border: "1px solid red",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
+              >
+                Date:
+              </Typography>
+            </Stack>
+
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid green",
+              }}
+            >
               <Typography sx={{ fontSize: "12px", fontWeight: "bold" }}>
-                End Time
+                {"17-09-2024"}
               </Typography>
-              <Typography sx={{ fontSize: "12px" }}>01:00 PM</Typography>
             </Stack>
-          </Grid>
-          <Grid item xs={4}>
-            <Stack direction="column" alignItems="center" spacing={1}>
+          </Stack>
+
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginBottom: "4px",
+            }}
+          >
+            <Stack
+              sx={{
+                border: "1px solid red",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
+              >
+                Start Time:
+              </Typography>
+            </Stack>
+
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid green",
+              }}
+            >
               <Typography sx={{ fontSize: "12px", fontWeight: "bold" }}>
-                Countdown
+                {"10:00 AM"}
               </Typography>
-              <Typography sx={{ fontSize: "12px" }}>03:00:00</Typography>
             </Stack>
-          </Grid>
-        </Grid>
+          </Stack>
+
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginBottom: "4px",
+            }}
+          >
+            <Stack
+              sx={{
+                border: "1px solid red",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
+              >
+              
+                End Time:
+              </Typography>
+            </Stack>
+
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid green",
+              }}
+            >
+              <Typography sx={{ fontSize: "12px", fontWeight: "bold" }}>
+                {"01:00 PM"}
+              </Typography>
+            </Stack>
+          </Stack>
+
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginBottom: "4px",
+            }}
+          >
+            <Stack
+              sx={{
+                border: "1px solid red",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
+              >
+                
+                Countdown:
+              </Typography>
+            </Stack>
+
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid green",
+              }}
+            >
+              <Typography sx={{ fontSize: "12px", fontWeight: "bold" }}>
+                {"03:00:00"}
+              </Typography>
+            </Stack>
+          </Stack>
+        </Stack> */}
+        <Stack
+          sx={{
+           
+            width: "80%",
+          }}
+        >
+          {/* Row to contain two columns */}
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginBottom: "4px",
+              marginTop: "4px",
+            }}
+          >
+            {/* First column for labels */}
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+                // border: "1px solid red",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  marginBottom: "4px",
+                }}
+              >
+                Exam Name:
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  marginBottom: "4px",
+                }}
+              >
+                Date:
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  marginBottom: "4px",
+                }}
+              >
+                Start Time:
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  marginBottom: "4px",
+                }}
+              >
+                End Time:
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  marginBottom: "4px",
+                }}
+              >
+                Countdown:
+              </Typography>
+            </Stack>
+
+            {/* Second column for values */}
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+                // border: "1px solid green",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  marginBottom: "4px",
+                 
+                }}
+              >
+                {"TET"}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  marginBottom: "4px",
+                }}
+              >
+                {"17-09-2024"}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  marginBottom: "4px",
+                }}
+              >
+                {"10:00 AM"}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  marginBottom: "4px",
+                }}
+              >
+                {"01:00 PM"}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  marginBottom: "4px",
+                }}
+              >
+                {"03:00:00"}
+              </Typography>
+            </Stack>
+          </Stack>
+        </Stack>
       </Stack>
     </Card>
   );

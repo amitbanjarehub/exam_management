@@ -1,14 +1,18 @@
+
+
 import React from "react";
-import { AppBar, Toolbar, Button, Stack } from "@mui/material";
+import { AppBar, Toolbar, Stack, Typography } from "@mui/material";
 import { SlHome } from "react-icons/sl";
 import { TbLayout2 } from "react-icons/tb";
 import { BsChatDots } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import Chatbot from "./Chatbot";
 
 const Footer = () => {
   const navigate = useNavigate();
 
   const handleHome = () => {
+    // window.location.href = "/management";
     navigate("/management");
   };
 
@@ -16,49 +20,78 @@ const Footer = () => {
     navigate("/layout");
   };
 
-  const handleChatbot = () => {
-    navigate("/chatbot");
-  };
   return (
     <AppBar
       position="fixed"
       sx={{
         top: "auto",
         bottom: 0,
-        width: "100%", // Make sure the footer spans the entire screen width
-        height: "36px", // Height matches AppHeader
+        width: "100%",
+        height: "70px", // Increased height for icons and text
         backgroundColor: "white",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        // border: "1px solid green",
-        boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.4)", // Shadow on the top side
+        boxShadow: "none", // Remove shadow to eliminate border
+        borderTop: "none", // Ensure there's no border at the top
       }}
     >
       <Toolbar
         sx={{
           justifyContent: "center",
-          width: { xl: "70%", lg: "80%", md: "90%", sm: "100%", xs: "100%" }, // Same as AppHeader
-          // border: "1px solid red",
+          width: { xl: "70%", lg: "80%", md: "90%", sm: "100%", xs: "100%" },
         }}
       >
         <Stack
           direction="row"
-          spacing={2}
+          spacing={5} // Add spacing between the icon groups
           sx={{
             display: "flex",
-            flexDirection: "row",
             justifyContent: "space-around",
+            alignItems: "center",
             width: "100%",
-            // border: "1px solid red",
           }}
         >
-          {/* <Button variant="contained">First</Button> */}
-          <SlHome color="black" size={24} onClick={handleHome} />
-          {/* <Button variant="contained">Second</Button> */}
-          <TbLayout2 color="black" size={24} onClick={handleLayout} />
-          {/* <Button variant="contained">Third</Button> */}
-          <BsChatDots color="black" size={24} onClick={handleChatbot} />
+          {/* Home Icon and Text */}
+          <Stack
+            direction="column"
+            spacing={0.5}
+            alignItems="center"
+            onClick={handleHome}
+            sx={{ cursor: "pointer" }}
+          >
+            <SlHome color="#13661e" size={24} />
+            <Typography variant="caption" color="black">
+              Home
+            </Typography>
+          </Stack>
+
+          {/* Layout Icon and Text */}
+          <Stack
+            direction="column"
+            spacing={0.5}
+            alignItems="center"
+            onClick={handleLayout}
+            sx={{ cursor: "pointer" }}
+          >
+            <TbLayout2 color="#13661e" size={24} />
+            <Typography variant="caption" color="black">
+              Layout
+            </Typography>
+          </Stack>
+
+          {/* Chatbot Icon and Text */}
+          <Stack
+            direction="column"
+            spacing={0.5}
+            alignItems="center"
+            sx={{ cursor: "pointer" }}
+          >
+            <Chatbot />
+            <Typography variant="caption" color="black">
+              Chatbot
+            </Typography>
+          </Stack>
         </Stack>
       </Toolbar>
     </AppBar>

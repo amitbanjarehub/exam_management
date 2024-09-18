@@ -5,7 +5,6 @@ import {
   Grid,
   Typography,
   Card,
-  CardContent,
   CardActions,
   Avatar,
   Stack,
@@ -14,30 +13,38 @@ import {
   AppBar,
   Toolbar,
   CssBaseline,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
+import { GiHamburgerMenu } from "react-icons/gi";
+import LokSevaAayugLogo from "./loksevaaayug.png";
 import Logo from "./logo.png";
 import Person1 from "./person1.png";
 import Person2 from "./person2.png";
 import Person3 from "./Person3.png";
 import Person4 from "./person4.png";
 import Person5 from "./person5.png";
-import { GiHamburgerMenu } from "react-icons/gi";
-import LokSevaAayugLogo from "./loksevaaayug.png";
 import ExamCard from "./ExamCard";
 import Footer from "./Footer";
+import NotFound from "./NoDatafound/NotFound";
+import Sidebar from "./Sidebar/Sidebar";
 
 const Management = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [expandedCard, setExpandedCard] = useState(null); // State to track expanded card
+  const [expandedCard, setExpandedCard] = useState(null);
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const [students, setStudents] = useState([]); // State to hold student data
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-
-  console.log("studentsData:==========>>>", students);
+  // const [students, setStudents] = useState([]);
+  const [studentsLive, setStudentsLive] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
   const currentDay = new Date().toLocaleDateString("en-us", {
@@ -46,6 +53,10 @@ const Management = () => {
   const currentDateTime = new Date().toLocaleString();
 
   const dayDateTime = `${currentDay}, ${currentDateTime}`;
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   const rows = [
     {
@@ -114,17 +125,10 @@ const Management = () => {
       room_no: "10",
     },
   ];
-  // https://robohash.org/elonmusk.png
-  // Filter students based on status and search term
-  const filteredRows = rows.filter((row) => {
-    const matchesStatus = filterStatus === "All" || row.status === filterStatus;
-    const matchesSearch =
-      row.rollNo.toString().includes(searchTerm) ||
-      row.name.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
 
-  const filteredRows1 = students.filter((row) => {
+  console.log("studentsLiveData:====>>", studentsLive);
+  // const filteredRows1 = students.filter((row) => {
+  const filteredRows1 = studentsLive.filter((row) => {
     const matchesStatus = filterStatus === "All" || row.status === filterStatus;
     const matchesSearch =
       row.rollNo.toString().includes(searchTerm) ||
@@ -134,8 +138,24 @@ const Management = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/"); // Navigate to login page after logging out
   };
+
+  // Add this useEffect to handle the back button press and prevent default behavior
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname); // Push an initial history state
+
+    const handleBackButton = (event) => {
+      event.preventDefault(); // Prevent default back behavior
+      setOpenLogoutDialog(true); // Open the logout dialog when back is pressed
+    };
+
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
+  }, []);
 
   const toggleExpandCard = (sNo) => {
     setExpandedCard(expandedCard === sNo ? null : sNo);
@@ -145,32 +165,48 @@ const Management = () => {
     navigate("/scanner");
   };
 
+  // Fetch students from the API (example code)
   useEffect(() => {
-    // Fetch data from the API
     const fetchStudents = async () => {
       try {
-        const response = await fetch(
-          "http://192.168.29.107:5001/api/all_students"
+        // const response = await fetch(
+        //   "http://192.168.29.107:5001/api/all_students"
+        // );
+
+        const liveData = await fetch(
+          "https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/students"
         );
-        // console.log("Data232:========>>>", response);
-        // Check if the response is OK (status 200)
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+        console.log("liveData:", liveData);
+
+        // if (!response.ok) {
+        //   throw new Error(`Error: ${response.status}`);
+        // }
+
+        if (!liveData.ok) {
+          throw new Error(`Error: ${liveData.status}`);
         }
 
-        const data = await response.json(); // Parse the JSON data
-        setStudents(data); // Set the students data in the state
-        setLoading(false); // Set loading to false after data is fetched
+        // const data = await response.json();
+        const dataLive = await liveData.json();
+        console.log("dataLive:====>>", dataLive?.students);
+        // setStudents(data);
+        setStudentsLive(dataLive?.students);
+        setLoading(false);
       } catch (err) {
-        setError(err.message); // Set the error message
-        setLoading(false); // Set loading to false even if there's an error
+        setError(err.message);
+        setLoading(false);
       }
     };
 
     fetchStudents();
-  }, []); // Empty dependency array ensures this runs only once when the component mounts
+  }, []);
 
-  // Handle loading and error states
+  // Re-push a state when the dialog is canceled, so the dialog opens again on the next back button press
+  const handleCancel = () => {
+    setOpenLogoutDialog(false);
+    window.history.pushState(null, null, window.location.pathname); // Push a new state
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -182,7 +218,6 @@ const Management = () => {
   return (
     <>
       <CssBaseline />
-
       <AppBar
         sx={{
           backgroundColor: "white",
@@ -199,7 +234,8 @@ const Management = () => {
           }}
         >
           <Stack>
-            <GiHamburgerMenu color="green" size={32} />
+            {/* Ensure the onClick is added to open sidebar */}
+            <GiHamburgerMenu color="green" size={32} onClick={toggleSidebar} />
           </Stack>
           <Stack
             sx={{
@@ -231,6 +267,9 @@ const Management = () => {
         </Toolbar>
       </AppBar>
 
+      {/* Sidebar Component */}
+      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
+
       <Box p={3} sx={{ marginTop: "80px", paddingBottom: "80px" }}>
         <Grid container justifyContent="left" mb={1}>
           <Typography
@@ -249,29 +288,6 @@ const Management = () => {
 
         <ExamCard />
 
-        {/* <Grid
-          container
-          justifyContent="center"
-          mb={2}
-          sx={{ marginTop: "20px", width: "100%" }}
-        >
-          <ButtonGroup
-            fullWidth
-            variant="outlined"
-            aria-label="Basic button group"
-          >
-            <Button onClick={() => setFilterStatus("All")} sx={{ flex: 1, }}>
-              All
-            </Button>
-            <Button onClick={() => setFilterStatus("Present")} sx={{ flex: 1 }}>
-              Present
-            </Button>
-            <Button onClick={() => setFilterStatus("Absent")} sx={{ flex: 1 }}>
-              Absent
-            </Button>
-          </ButtonGroup>
-        </Grid> */}
-
         <Grid
           container
           justifyContent="center"
@@ -282,32 +298,38 @@ const Management = () => {
             fullWidth
             variant="outlined"
             aria-label="Basic button group"
+            sx={{
+              "& .MuiButton-outlined": {
+                borderColor: "gray", // Set border color to black
+              },
+            }}
           >
             <Button
               onClick={() => setFilterStatus("All")}
               sx={{
                 flex: 1,
                 backgroundColor:
-                  filterStatus === "All" ? "violet" : "transparent",
+                  filterStatus === "All" ? "#2E7D32" : "transparent",
                 color: filterStatus === "All" ? "white" : "black",
                 "&:hover": {
                   backgroundColor:
-                    filterStatus === "All" ? "darkviolet" : "lightgray",
+                    filterStatus === "All" ? "#2E7D32" : "lightgray",
                 },
               }}
             >
               All
             </Button>
+
             <Button
               onClick={() => setFilterStatus("Present")}
               sx={{
                 flex: 1,
                 backgroundColor:
-                  filterStatus === "Present" ? "violet" : "transparent",
+                  filterStatus === "Present" ? "#2E7D32" : "transparent",
                 color: filterStatus === "Present" ? "white" : "black",
                 "&:hover": {
                   backgroundColor:
-                    filterStatus === "Present" ? "darkviolet" : "lightgray",
+                    filterStatus === "Present" ? "#2E7D32" : "lightgray",
                 },
               }}
             >
@@ -318,11 +340,11 @@ const Management = () => {
               sx={{
                 flex: 1,
                 backgroundColor:
-                  filterStatus === "Absent" ? "violet" : "transparent",
+                  filterStatus === "Absent" ? "#2E7D32" : "transparent",
                 color: filterStatus === "Absent" ? "white" : "black",
                 "&:hover": {
                   backgroundColor:
-                    filterStatus === "Absent" ? "darkviolet" : "lightgray",
+                    filterStatus === "Absent" ? "#2E7D32" : "lightgray",
                 },
               }}
             >
@@ -330,6 +352,8 @@ const Management = () => {
             </Button>
           </ButtonGroup>
         </Grid>
+
+        {/* Rest of your management page content */}
 
         <Grid container justifyContent="center" mb={2} sx={{ width: "100%" }}>
           <Stack
@@ -348,12 +372,24 @@ const Management = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               sx={{ marginRight: "8px" }}
               fullWidth
+              InputLabelProps={{
+                sx: {
+                  color: "black", // Default label color
+                  "&.Mui-focused": {
+                    color: "black", // Label color when focused
+                  },
+                },
+              }}
             />
 
             <Button
               variant="contained"
               fullWidth
-              sx={{ backgroundColor: "rgb(120, 106, 255)", width: "20px" }}
+              sx={{
+                // backgroundColor: "rgb(120, 106, 255)",
+                backgroundColor: "#388e3c",
+                width: "20px",
+              }}
               onClick={handleQrSacnner}
             >
               Scan
@@ -368,7 +404,7 @@ const Management = () => {
                 <Card onClick={() => toggleExpandCard(row._id)}>
                   <Stack spacing={2} sx={{ width: "100%", pl: 0 }}>
                     {/* First Grid: Logo, Exam Name, and Date */}
-                    <Grid container spacing={1} sx={{ pl: "4px", pr: "4px" }}>
+                    <Grid container spacing={0} sx={{ pl: "4px", pr: "4px" }}>
                       <Grid
                         item
                         xs={4}
@@ -388,18 +424,18 @@ const Management = () => {
                             height: 80,
                             // marginLeft: "20px",
                             // border: "1px solid green",
-                            paddingBottom: "16px",
-                            marginBottom: "8px",
+                            // paddingBottom: "16px",
+                            // marginBottom: "8px",
                           }}
                           src={row.image}
                           alt={row.name}
                         />
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item xs={4} sx={{ marginTop: "32px" }}>
                         <Stack
                           direction="column"
                           alignItems="center"
-                          spacing={1}
+                          spacing={0}
                         >
                           <Typography
                             sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -411,11 +447,11 @@ const Management = () => {
                           </Typography>
                         </Stack>
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item xs={4} sx={{ marginTop: "32px" }}>
                         <Stack
                           direction="column"
                           alignItems="center"
-                          spacing={1}
+                          spacing={0}
                         >
                           <Typography
                             sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -432,12 +468,12 @@ const Management = () => {
                     {/* Conditionally render the second grid based on card expansion */}
                     {expandedCard === row._id && (
                       <>
-                        <Grid container spacing={1}>
+                        <Grid container spacing={0}>
                           <Grid item xs={4}>
                             <Stack
                               direction="column"
                               alignItems="center"
-                              spacing={1}
+                              spacing={0}
                             >
                               <Typography
                                 sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -453,7 +489,7 @@ const Management = () => {
                             <Stack
                               direction="column"
                               alignItems="center"
-                              spacing={1}
+                              spacing={0}
                             >
                               <Typography
                                 sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -469,7 +505,7 @@ const Management = () => {
                             <Stack
                               direction="column"
                               alignItems="center"
-                              spacing={1}
+                              spacing={0}
                             >
                               <Typography
                                 sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -483,12 +519,12 @@ const Management = () => {
                           </Grid>
                         </Grid>
 
-                        <Grid container spacing={1}>
+                        <Grid container spacing={0}>
                           <Grid item xs={4}>
                             <Stack
                               direction="column"
                               alignItems="center"
-                              spacing={1}
+                              spacing={0}
                             >
                               <Typography
                                 sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -506,7 +542,7 @@ const Management = () => {
                             <Stack
                               direction="column"
                               alignItems="center"
-                              spacing={1}
+                              spacing={0}
                             >
                               <Typography
                                 sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -522,7 +558,7 @@ const Management = () => {
                             <Stack
                               direction="column"
                               alignItems="center"
-                              spacing={1}
+                              spacing={0}
                             >
                               <Typography
                                 sx={{ fontSize: "12px", fontWeight: "bold" }}
@@ -543,7 +579,8 @@ const Management = () => {
                       <Button
                         variant="contained"
                         fullWidth
-                        sx={{ backgroundColor: "rgb(120, 106, 255)" }}
+                        // sx={{ backgroundColor: "rgb(120, 106, 255)" }}
+                        sx={{ backgroundColor: "#2e7d32" }}
                       >
                         {row.action}
                       </Button>
@@ -553,15 +590,36 @@ const Management = () => {
               </Grid>
             ))
           ) : (
-            <Typography variant="h6" textAlign="center">
-              No Data Found
-            </Typography>
+            <NotFound />
           )}
         </Grid>
       </Box>
 
       {/* Footer Component */}
       <Footer />
+
+      {/* Logout confirmation dialog */}
+      <Dialog
+        open={openLogoutDialog}
+        onClose={handleCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Logout"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleLogout} color="primary" autoFocus>
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
