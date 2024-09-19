@@ -131,6 +131,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { RiInformationFill } from "react-icons/ri";
 import { MdOutlineContactPhone } from "react-icons/md";
 import AdminLogo from "./adminLogo.png";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ open, toggleSidebar }) => {
   const [openHeading, setOpenHeading] = useState(false);
@@ -138,6 +139,12 @@ const Sidebar = ({ open, toggleSidebar }) => {
   const handleClick = () => {
     setOpenHeading(!openHeading);
   };
+
+  const handleCamera = () => {
+    navigate("/camera");
+  };
+
+  const navigate = useNavigate();
 
   return (
     <Drawer
@@ -255,6 +262,15 @@ const Sidebar = ({ open, toggleSidebar }) => {
               <MdOutlineLiveHelp size={24} /> {/* Adjust the icon size here */}
             </ListItemIcon>
             <ListItemText primary="Help" />
+          </ListItem>
+
+          <ListItem button onClick={handleCamera}>
+            <ListItemIcon
+              sx={{ minWidth: "40px", mr: 0 }} // Adjust the margin here to change the gap
+            >
+              <MdOutlineLiveHelp size={24} /> {/* Adjust the icon size here */}
+            </ListItemIcon>
+            <ListItemText primary="Camera" />
           </ListItem>
         </List>
       </Box>

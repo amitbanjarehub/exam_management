@@ -5,6 +5,7 @@ import Management from "./Pages/Exam-management/Management";
 import Scanner from "./Pages/Exam-management/Scanner";
 import QRscanner from "./Pages/Exam-management/QRscanner/QRscanner";
 import Layout from "./Pages/Layout/Layout";
+import FaceDetection from "./Pages/FaceDetection/FaceDetection";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/qr-scanner" element={<Scanner />} />
         <Route path="/scanner" element={<QRscanner />} />
         <Route path="/layout" element={<Layout />} />
+        <Route path="/camera" element={<FaceDetection />} />
       </Routes>
     </BrowserRouter>
   );
