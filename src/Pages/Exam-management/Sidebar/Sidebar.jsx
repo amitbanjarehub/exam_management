@@ -144,6 +144,10 @@ const Sidebar = ({ open, toggleSidebar }) => {
     navigate("/camera");
   };
 
+  const handleStudent = () => {
+    navigate("/studentdata");
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -255,7 +259,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
             <ListItemText primary="Contacts" />
           </ListItem>
 
-          <ListItem button>
+          <ListItem button onClick={handleStudent}>
             <ListItemIcon
               sx={{ minWidth: "40px", mr: 0 }} // Adjust the margin here to change the gap
             >
@@ -266,11 +270,11 @@ const Sidebar = ({ open, toggleSidebar }) => {
 
           <ListItem button onClick={handleCamera}>
             <ListItemIcon
-              sx={{ minWidth: "40px", mr: 0 }} // Adjust the margin here to change the gap
+              sx={{ minWidth: "40px", mr: 0 }} // Adjust the margin here to change the gap 
             >
               <MdOutlineLiveHelp size={24} /> {/* Adjust the icon size here */}
             </ListItemIcon>
-            <ListItemText primary="Camera" />
+            <ListItemText primary="Camera876" />
           </ListItem>
         </List>
       </Box>
