@@ -145,7 +145,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
   };
 
   const handleStudent = () => {
-    navigate("/studentdata");
+    navigate("/student_details");
   };
 
   const navigate = useNavigate();

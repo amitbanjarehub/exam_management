@@ -1,55 +1,291 @@
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Stack,
+  AppBar,
+  Toolbar,
+  Grid,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import LokSevaAayugLogo from "../loksevaaayug.png";
 
-import React, { useState } from "react";
-import { QrReader } from "react-qr-reader";
-import { useNavigate } from "react-router-dom"; // useNavigate ko import karein
+const Student_details = () => {
+  const { id } = useParams(); // Get the id from the URL params
+  const [studentData, setStudentData] = useState(null); // State to store student data
+  const [loading, setLoading] = useState(true); // State to show loading
+  const [errorMessage, setErrorMessage] = useState(null); // State to handle errors
 
-const Scanner = () => {
-  const [scanResult, setScanResult] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate(); // useNavigate ko initialize karein
+  useEffect(() => {
+    // Fetch student data using the ID
+    const fetchStudentData = async () => {
+      try {
+        const response = await fetch(
+          `https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/students/${id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch student data");
+        }
+        const data = await response.json();
+        setStudentData(data); // Store the student data
+        setLoading(false); // Set loading to false
+      } catch (error) {
+        setErrorMessage(error.message);
+        setLoading(false); // Stop loading even in case of error
+      }
+    };
 
-  const handleScan = (data) => {
-    if (data) {
-      setScanResult(data); // Set the scanned result
-      const studentId = data.match(/studentId:\s*"([^"]+)"/)[1]; // Extract the studentId
-      navigate(`/student-data/${studentId}`); // Navigate to StudentData with studentId in URL
-    }
-  };
-
-  const handleError = (err) => {
-    setErrorMessage("Error occurred: " + err);
-    console.error(err); // Log any error that happens during scanning
-  };
+    // Call the fetch function
+    fetchStudentData();
+  }, [id]);
 
   return (
-    <div>
-      <h1>QR Code Scanner</h1>
-      <div style={{ margin: "20px auto", width: "300px" }}>
-        <QrReader
-          delay={300}
-          constraints={{ facingMode: "environment" }} // Use back camera
-          onError={handleError}
-          onScan={handleScan}
-          style={{ width: "100%" }}
-        />
-      </div>
+    <Stack>
+      <AppBar
+        sx={{
+          backgroundColor: "white",
+          display: { xl: "flex" },
+          flexDirection: { xl: "row", lg: "row" },
+          justifyContent: { xl: "center", lg: "center", md: "column" },
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: { xl: "70%", lg: "80%" },
+          }}
+        >
+          <Stack
+            sx={{
+              height: { sm: "40px", xs: "40px" },
+              width: { sm: "100%", xs: "100%" },
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <Typography
+              sx={{
+                color: "black",
+                display: " flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: { xs: "13px", sm: "16px" },
+              }}
+            >
+              <img
+                src={LokSevaAayugLogo}
+                alt="logo"
+                style={{ height: "32px", width: "32px", marginRight: "8px" }}
+              />{" "}
+              Chhattisgarh Public Service Commission
+            </Typography>
+          </Stack>
+        </Toolbar>
+      </AppBar>
 
-      {scanResult ? (
-        <div>
-          <h2>Scanned QR Code Data:</h2>
-          <p>{scanResult}</p>
-        </div>
-      ) : (
-        <p>No QR code scanned yet.</p>
-      )}
+      <Box
+        sx={{
+          maxWidth: 600,
+          mx: "12px",
+          p: 4,
+          mt: 5,
+          boxShadow: 3,
+          borderRadius: 2,
+          marginTop: { lg: "10%", xl: "10%", xs: "100px", sm: "100px" },
+          backgroundColor: "white",
+        }}
+      >
+        {/* Loading and Error Handling */}
+        {loading && <Typography>Loading student data...</Typography>}
+        {errorMessage && <Typography color="error">{errorMessage}</Typography>}
 
-      {errorMessage && (
-        <div>
-          <h3 style={{ color: "red" }}>{errorMessage}</h3>
-        </div>
-      )}
-    </div>
+        {/* Show student image when data is fetched */}
+        {!loading && studentData && (
+          <>
+            <Stack
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingBottom: "40px",
+              }}
+            >
+              <img
+                src={studentData.image}
+                alt={studentData.name}
+                style={{ height: "80px", width: "80px" }}
+              />
+            </Stack>
+
+            {/* One row with two fields */}
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography
+                  sx={{
+                    color: "rgb(100, 116, 139)",
+                    fontSize: { lg: "18px", sm: "16px" },
+                    fontWeight: "400",
+                  }}
+                >
+                  Name:
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 3, borderRadius: 2 }}
+                  size="small"
+                  value={studentData.name}
+                  disabled
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography
+                  sx={{
+                    color: "rgb(100, 116, 139)",
+                    fontSize: { lg: "18px", sm: "16px" },
+                    fontWeight: "400",
+                  }}
+                >
+                  Roll No:
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 3, borderRadius: 2 }}
+                  size="small"
+                  value={studentData.rollNo}
+                  disabled
+                />
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography
+                  sx={{
+                    color: "rgb(100, 116, 139)",
+                    fontSize: { lg: "18px", sm: "16px" },
+                    fontWeight: "400",
+                  }}
+                >
+                  Room/Hall No:
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 3, borderRadius: 2 }}
+                  size="small"
+                  value={studentData.room_no}
+                  disabled
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography
+                  sx={{
+                    color: "rgb(100, 116, 139)",
+                    fontSize: { lg: "18px", sm: "16px" },
+                    fontWeight: "400",
+                  }}
+                >
+                  Date of Birth:
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 3, borderRadius: 2 }}
+                  size="small"
+                  value={studentData.dob}
+                  disabled
+                />
+              </Grid>
+            </Grid>
+
+            {/* Remaining fields */}
+            <Stack>
+              <Typography
+                sx={{
+                  color: "rgb(100, 116, 139)",
+                  fontSize: { lg: "18px", sm: "16px" },
+                  fontWeight: "400",
+                }}
+              >
+                Gender:
+              </Typography>
+              <TextField
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 3, borderRadius: 2 }}
+                size="small"
+                value={studentData.gender}
+                disabled
+              />
+            </Stack>
+
+            <Stack>
+              <Typography
+                sx={{
+                  color: "rgb(100, 116, 139)",
+                  fontSize: { lg: "18px", sm: "16px" },
+                  fontWeight: "400",
+                }}
+              >
+                Age:
+              </Typography>
+              <TextField
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 3, borderRadius: 2 }}
+                size="small"
+                value={studentData.age}
+                disabled
+              />
+            </Stack>
+
+            <Stack>
+              <Typography
+                sx={{
+                  color: "rgb(100, 116, 139)",
+                  fontSize: { lg: "18px", sm: "16px" },
+                  fontWeight: "400",
+                }}
+              >
+                Address:
+              </Typography>
+              <TextField
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 3, borderRadius: 2 }}
+                size="small"
+                value={studentData.address}
+                disabled
+              />
+            </Stack>
+
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{
+                mb: 3,
+                textTransform: "none",
+                borderRadius: 2,
+                backgroundColor: "rgb(46 125 50)",
+              }}
+              size="large"
+            >
+              Verify
+            </Button>
+          </>
+        )}
+      </Box>
+    </Stack>
   );
 };
 
-export default Scanner;
+export default Student_details;
