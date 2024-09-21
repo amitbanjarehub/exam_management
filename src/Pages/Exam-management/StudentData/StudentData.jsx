@@ -15,10 +15,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import LokSevaAayugLogo from "../loksevaaayug.png";
 
 const StudentData = () => {
-  const { id } = useParams();  
+  const { id } = useParams();
   const [studentData, setStudentData] = useState(null);
-  const [loading, setLoading] = useState(true); 
-  const [errorMessage, setErrorMessage] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -33,11 +33,11 @@ const StudentData = () => {
           throw new Error("Student data not found....!");
         }
         const data = await response.json();
-        setStudentData(data.student); 
-        setLoading(false); 
+        setStudentData(data.student);
+        setLoading(false);
       } catch (error) {
         setErrorMessage(error.message);
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -46,17 +46,23 @@ const StudentData = () => {
   }, [id]);
 
   // Handle Verify Button Click
-  const handleVerify = (id, image, rollno) => {  
-    if (id && image && rollno) {
-      navigate("/camera", {
-        state: {
-          studentImage: image,
-          studentId: id,
-          studentRollno: rollno,
-        },
-      });
+  const handleVerify = (id, image, rollno, status) => {
+    if (status !== "present") {
+      if (id && image && rollno) {
+        navigate("/camera", {
+          state: {
+            studentImage: image,
+            studentId: id,
+            studentRollno: rollno,
+          },
+        });
+      } else {
+        console.error("Missing student data");
+      }
     } else {
-      console.error("Missing student data");
+      // If status is "Present", show an alert
+      alert("Student is already verified.");
+       navigate("/management");
     }
   };
 
@@ -109,7 +115,7 @@ const StudentData = () => {
 
       <Box
         sx={{
-          maxWidth: 600, 
+          maxWidth: 600,
           mx: "12px",
           p: 4,
           mt: 5,
@@ -308,12 +314,13 @@ const StudentData = () => {
                 borderRadius: 2,
                 backgroundColor: "rgb(46 125 50)",
               }}
-              size="large"              
+              size="large"
               onClick={() =>
                 handleVerify(
                   studentData.studentId,
                   studentData.image,
-                  studentData.rollNo
+                  studentData.rollNo,
+                  studentData.status
                 )
               }
             >

@@ -164,13 +164,27 @@ const Management = () => {
   };
 
   // Handle Verify Button Click
-  const handleVerify = (id, image, rollno) => {
-    if (id && image && rollno) {
-      navigate("/camera", {
-        state: { studentImage: image, studentId: id, studentRollno: rollno },
-      });
+  const handleVerify = (id, image, rollno, status) => {
+    // if (id && image && rollno) {
+    //   navigate("/camera", {
+    //     state: { studentImage: image, studentId: id, studentRollno: rollno },
+    //   });
+    // } else {
+    //   console.error("Invalid student data passed to handleVerify");
+    // }
+
+    // Check if the student is not "Present" before navigating
+    if (status !== "present") {
+      if (id && image && rollno) {
+        navigate("/camera", {
+          state: { studentImage: image, studentId: id, studentRollno: rollno },
+        });
+      } else {
+        console.error("Invalid student data passed to handleVerify");
+      }
     } else {
-      console.error("Invalid student data passed to handleVerify");
+      // If status is "Present", show an alert
+      alert("Student is already verified.");
     }
   };
 
@@ -573,7 +587,12 @@ const Management = () => {
                         fullWidth
                         sx={{ backgroundColor: "#2e7d32" }}
                         onClick={() =>
-                          handleVerify(row.studentId, row.image, row.rollNo)
+                          handleVerify(
+                            row.studentId,
+                            row.image,
+                            row.rollNo,
+                            row.status
+                          )
                         }
                       >
                         {row.action}
