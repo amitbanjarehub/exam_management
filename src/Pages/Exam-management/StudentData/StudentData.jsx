@@ -15,13 +15,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import LokSevaAayugLogo from "../loksevaaayug.png";
 
 const StudentData = () => {
-  const { id } = useParams(); // Getting id from the route (URL)
-  //   const id = "fb295d2f-4621-49c2-b7f3-65ff04798630";
-  const [studentData, setStudentData] = useState(null); // State to store student data
-  const [loading, setLoading] = useState(true); // State to show loading
-  const [errorMessage, setErrorMessage] = useState(null); // State to handle errors
+  const { id } = useParams();  
+  const [studentData, setStudentData] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  const [errorMessage, setErrorMessage] = useState(null); 
 
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch student data using the ID
@@ -34,11 +33,11 @@ const StudentData = () => {
           throw new Error("Student data not found....!");
         }
         const data = await response.json();
-        setStudentData(data.student); // Store the student data from the response
-        setLoading(false); // Set loading to false
+        setStudentData(data.student); 
+        setLoading(false); 
       } catch (error) {
         setErrorMessage(error.message);
-        setLoading(false); // Stop loading even in case of error
+        setLoading(false); 
       }
     };
 
@@ -47,11 +46,17 @@ const StudentData = () => {
   }, [id]);
 
   // Handle Verify Button Click
-  const handleVerify = () => {
-    if (studentData && studentData.image) {
+  const handleVerify = (id, image, rollno) => {  
+    if (id && image && rollno) {
       navigate("/camera", {
-        state: { studentImage: studentData.image },
+        state: {
+          studentImage: image,
+          studentId: id,
+          studentRollno: rollno,
+        },
       });
+    } else {
+      console.error("Missing student data");
     }
   };
 
@@ -104,7 +109,7 @@ const StudentData = () => {
 
       <Box
         sx={{
-          maxWidth: 600, // Increased width
+          maxWidth: 600, 
           mx: "12px",
           p: 4,
           mt: 5,
@@ -303,8 +308,14 @@ const StudentData = () => {
                 borderRadius: 2,
                 backgroundColor: "rgb(46 125 50)",
               }}
-              size="large"
-              onClick={handleVerify} // Navigate to FaceDetection on click
+              size="large"              
+              onClick={() =>
+                handleVerify(
+                  studentData.studentId,
+                  studentData.image,
+                  studentData.rollNo
+                )
+              }
             >
               Verify
             </Button>

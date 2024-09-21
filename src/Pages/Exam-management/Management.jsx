@@ -126,8 +126,6 @@ const Management = () => {
     },
   ];
 
-  console.log("studentsLiveData:====>>", studentsLive);
-  // const filteredRows1 = students.filter((row) => {
   const filteredRows1 = studentsLive.filter((row) => {
     const matchesStatus = filterStatus === "All" || row.status === filterStatus;
     const matchesSearch =
@@ -138,16 +136,16 @@ const Management = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/"); // Navigate to login page after logging out
+    navigate("/");
   };
 
   // Add this useEffect to handle the back button press and prevent default behavior
   useEffect(() => {
-    window.history.pushState(null, null, window.location.pathname); // Push an initial history state
+    window.history.pushState(null, null, window.location.pathname);
 
     const handleBackButton = (event) => {
-      event.preventDefault(); // Prevent default back behavior
-      setOpenLogoutDialog(true); // Open the logout dialog when back is pressed
+      event.preventDefault();
+      setOpenLogoutDialog(true);
     };
 
     window.addEventListener("popstate", handleBackButton);
@@ -165,31 +163,31 @@ const Management = () => {
     navigate("/scanner");
   };
 
+  // Handle Verify Button Click
+  const handleVerify = (id, image, rollno) => {
+    if (id && image && rollno) {
+      navigate("/camera", {
+        state: { studentImage: image, studentId: id, studentRollno: rollno },
+      });
+    } else {
+      console.error("Invalid student data passed to handleVerify");
+    }
+  };
+
   // Fetch students from the API (example code)
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        // const response = await fetch(
-        //   "http://192.168.29.107:5001/api/all_students"
-        // );
-
         const liveData = await fetch(
           "https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/students"
         );
-        console.log("liveData:", liveData);
-
-        // if (!response.ok) {
-        //   throw new Error(`Error: ${response.status}`);
-        // }
 
         if (!liveData.ok) {
           throw new Error(`Error: ${liveData.status}`);
         }
 
-        // const data = await response.json();
         const dataLive = await liveData.json();
-        console.log("dataLive:====>>", dataLive?.students);
-        // setStudents(data);
+
         setStudentsLive(dataLive?.students);
         setLoading(false);
       } catch (err) {
@@ -204,7 +202,7 @@ const Management = () => {
   // Re-push a state when the dialog is canceled, so the dialog opens again on the next back button press
   const handleCancel = () => {
     setOpenLogoutDialog(false);
-    window.history.pushState(null, null, window.location.pathname); // Push a new state
+    window.history.pushState(null, null, window.location.pathname);
   };
 
   if (loading) {
@@ -300,7 +298,7 @@ const Management = () => {
             aria-label="Basic button group"
             sx={{
               "& .MuiButton-outlined": {
-                borderColor: "gray", // Set border color to black
+                borderColor: "gray",
               },
             }}
           >
@@ -374,9 +372,9 @@ const Management = () => {
               fullWidth
               InputLabelProps={{
                 sx: {
-                  color: "black", // Default label color
+                  color: "black",
                   "&.Mui-focused": {
-                    color: "black", // Label color when focused
+                    color: "black",
                   },
                 },
               }}
@@ -386,7 +384,6 @@ const Management = () => {
               variant="contained"
               fullWidth
               sx={{
-                // backgroundColor: "rgb(120, 106, 255)",
                 backgroundColor: "#388e3c",
                 width: "20px",
               }}
@@ -409,7 +406,6 @@ const Management = () => {
                         item
                         xs={4}
                         sx={{
-                          // border: "1px solid red",
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "center",
@@ -422,10 +418,6 @@ const Management = () => {
                           sx={{
                             width: 80,
                             height: 80,
-                            // marginLeft: "20px",
-                            // border: "1px solid green",
-                            // paddingBottom: "16px",
-                            // marginBottom: "8px",
                           }}
                           src={row.image}
                           alt={row.name}
@@ -579,8 +571,10 @@ const Management = () => {
                       <Button
                         variant="contained"
                         fullWidth
-                        // sx={{ backgroundColor: "rgb(120, 106, 255)" }}
                         sx={{ backgroundColor: "#2e7d32" }}
+                        onClick={() =>
+                          handleVerify(row.studentId, row.image, row.rollNo)
+                        }
                       >
                         {row.action}
                       </Button>

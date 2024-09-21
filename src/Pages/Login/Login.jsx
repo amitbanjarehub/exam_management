@@ -47,7 +47,7 @@ const LoginCard = () => {
       );
 
       const data = await response.json();
-      console.log("dataLogin:----->>>", data?.accessToken);
+      
 
       if (response.ok) {
         // localStorage.setItem("token", data.token);

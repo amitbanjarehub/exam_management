@@ -1,16 +1,18 @@
 
-
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const videoConstraints = {
   facingMode: "user", // Use front camera
 };
 
 const FaceDetection = () => {
+  const navigate = useNavigate(); 
   const location = useLocation();
-  const studentImage = location.state?.studentImage; // Access the passed image from navigation state
+  const studentImage = location.state?.studentImage; 
+  const studentId = location.state?.studentId;
+  const studentRollno = location.state?.studentRollno; 
 
   const webcamRef = useRef(null);
   const [photo1Url, setPhoto1] = useState(studentImage); // Database image as photo1
@@ -21,6 +23,12 @@ const FaceDetection = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setPhoto2(imageSrc); // Set the captured image
   }, [webcamRef]);
+
+  useEffect(() => {
+    if (photo2 !== null) {
+      compareWithDatabase();
+    }
+  }, [photo2]);
 
   // Helper function to remove the base64 prefix and return pure base64
   const extractBase64 = (dataURI) => {
@@ -46,22 +54,11 @@ const FaceDetection = () => {
     if (!photo1Url || !photo2) {
       alert("Please capture both images for comparison!");
       return;
-    }
-
-    console.log("photo1Url:", photo1Url);
-    console.log("photo2:", photo2);
+    }  
 
     try {
-      // Remove base64 prefix from both images
-
       const base64Photo2 = extractBase64(photo2); // Remove the prefix from captured image
-
-      // Convert base64 images to Blobs
-
       const blobPhoto2 = base64ToBlob(base64Photo2, "image/jpeg"); // captured image
-
-      console.log("photo1Url:", photo1Url);
-      console.log("blobPhoto2:", photo2);
 
       const formData = new FormData();
       formData.append("photo2", blobPhoto2, "photo2.jpg");
@@ -79,8 +76,44 @@ const FaceDetection = () => {
       const result = await response.json();
       alert(`Message: ${result.message}, Similarity: ${result.similarity}%`);
 
+      // If similarity is greater than 90, update the student status
+      if (result.similarity > 90) {
+        await updateStudentStatus();
+      } else {
+        navigate("/management");
+      }
     } catch (error) {
       console.error("Error comparing images:", error);
+    }
+  };
+
+  // Function to update student status based on similarity result
+  const updateStudentStatus = async () => {
+    try {
+      const response = await fetch(
+        `https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/students/updateStatus`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            studentId: studentId,
+            rollNo: studentRollno,
+            status: "present",
+          }),
+        }
+      );
+
+      const result = await response.json();
+      if (result.statusCode === 200) {
+        alert("Student status updated successfully.");
+        navigate("/management"); // Navigate after updating the status
+      } else {
+        alert("Failed to update student status.");
+      }
+    } catch (error) {
+      console.error("Error updating student status:", error);
     }
   };
 
@@ -102,10 +135,7 @@ const FaceDetection = () => {
       {/* Action Buttons */}
       <div style={buttonContainerStyle}>
         <button onClick={capture} style={buttonStyle}>
-          Capture Image for Comparison
-        </button>
-        <button onClick={compareWithDatabase} style={buttonStyle}>
-          Compare
+          Capture Image
         </button>
       </div>
 
@@ -114,15 +144,9 @@ const FaceDetection = () => {
         {photo1Url && (
           <div>
             <h2>Student Image</h2>
-            <img src={photo1Url} alt="Student" style={previewImageStyle} />
+            <img src={photo1Url} alt="Student" style={previewImageStyle1} />
           </div>
-        )}
-        {photo2 && (
-          <div>
-            <h2>Captured Image</h2>
-            <img src={photo2} alt="Captured" style={previewImageStyle} />
-          </div>
-        )}
+        )}      
       </div>
     </div>
   );
@@ -175,6 +199,13 @@ const previewImageStyle = {
   width: "200px",
   height: "260px",
   borderRadius: "50%",
+  border: "5px solid green",
+  objectFit: "cover",
+};
+
+const previewImageStyle1 = {
+  width: "200px",
+  height: "200px", 
   border: "5px solid green",
   objectFit: "cover",
 };

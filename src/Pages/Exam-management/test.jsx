@@ -1,4 +1,7 @@
-import React, { useRef, useState, useCallback } from "react";
+// import React, { useRef, useState, useCallback, useEffect } from "react";
+// import Webcam from "react-webcam";
+// import { useLocation } from "react-router-dom";
+import React, { useRef, useState, useCallback, useEffect } from "react"; // Correct import
 import Webcam from "react-webcam";
 import { useLocation } from "react-router-dom";
 
@@ -8,9 +11,11 @@ const videoConstraints = {
 
 const FaceDetection = () => {
   const location = useLocation();
-  const photo1Url = new URLSearchParams(location.search).get("photo1Url"); // Extract photo1Url from query params
+  const studentImage = location.state?.studentImage; // Access the passed image from navigation state
+  const studentId = location.state?.studentId; // Assume student ID is passed as well
 
   const webcamRef = useRef(null);
+  const [photo1Url, setPhoto1] = useState(studentImage); // Database image as photo1
   const [photo2, setPhoto2] = useState(null); // Captured image as photo2
 
   // Capture image for photo2
@@ -19,9 +24,24 @@ const FaceDetection = () => {
     setPhoto2(imageSrc); // Set the captured image
   }, [webcamRef]);
 
+  // useEffect to trigger the comparison automatically after photo2 is set
+  useEffect(() => {
+    if (photo2 !== null) {
+      compareWithDatabase();
+    }
+  }, [photo2]);
+
+  // Helper function to remove the base64 prefix and return pure base64
+  const extractBase64 = (dataURI) => {
+    if (!dataURI.includes(",")) {
+      throw new Error("Invalid base64 data.");
+    }
+    return dataURI.split(",")[1]; // Only return the base64 part
+  };
+
   // Convert base64 to Blob
   const base64ToBlob = (base64Data, mimeType) => {
-    const byteString = atob(base64Data.split(",")[1]); // Decode base64
+    const byteString = atob(base64Data); // Decode base64
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
     for (let i = 0; i < byteString.length; i++) {
@@ -33,17 +53,20 @@ const FaceDetection = () => {
   // Compare the captured image with the student image from the database
   const compareWithDatabase = async () => {
     if (!photo1Url || !photo2) {
-      alert("Please capture the image for comparison!");
+      alert("Please capture both images for comparison!");
       return;
     }
 
+    console.log("photo1Url:", photo1Url);
+    console.log("photo2:", photo2);
+
     try {
-      const blobPhoto2 = base64ToBlob(photo2, "image/jpeg"); // captured image
+      const base64Photo2 = extractBase64(photo2); // Remove the prefix from captured image
+      const blobPhoto2 = base64ToBlob(base64Photo2, "image/jpeg"); // captured image
 
       const formData = new FormData();
       formData.append("photo2", blobPhoto2, "photo2.jpg");
 
-      // Send request with the photo1Url as a query parameter and photo2 in the body
       const response = await fetch(
         `https://whatsappapi.vertexsuite.in/v1/vs/compareFaces2?photo1Url=${encodeURIComponent(
           photo1Url
@@ -56,8 +79,38 @@ const FaceDetection = () => {
 
       const result = await response.json();
       alert(`Message: ${result.message}, Similarity: ${result.similarity}%`);
+
+      // If similarity is greater than 90, update the student status
+      if (result.similarity > 90) {
+        await updateStudentStatus(studentId, "Verified");
+      }
     } catch (error) {
       console.error("Error comparing images:", error);
+    }
+  };
+
+  // Function to update student status based on similarity result
+  const updateStudentStatus = async (studentId, status) => {
+    try {
+      const response = await fetch(
+        `https://api.yourserver.com/updateStudentStatus`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ studentId, status }),
+        }
+      );
+
+      const result = await response.json();
+      if (result.success) {
+        alert("Student status updated successfully.");
+      } else {
+        alert("Failed to update student status.");
+      }
+    } catch (error) {
+      console.error("Error updating student status:", error);
     }
   };
 
@@ -76,13 +129,10 @@ const FaceDetection = () => {
         />
       </div>
 
-      {/* Action Buttons */}
+      {/* Capture Button */}
       <div style={buttonContainerStyle}>
         <button onClick={capture} style={buttonStyle}>
           Capture Image for Comparison
-        </button>
-        <button onClick={compareWithDatabase} style={buttonStyle}>
-          Compare
         </button>
       </div>
 
