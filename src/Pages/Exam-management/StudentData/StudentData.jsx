@@ -1,20 +1,3 @@
-// import React from "react";
-// import { useParams } from "react-router-dom"; // Import useParams
-
-// const StudentData = () => {
-//   const { id } = useParams(); // Get the studentId from URL params
-//   console.log("id:=====>>", id);
-//   return (
-//     <div>
-//       <h1>StudentData</h1>
-//       <div>Get Student id: {id || "no id found"}</div>{" "}
-//       {/* Print the studentId */}
-//     </div>
-//   );
-// };
-
-// export default StudentData;
-
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -30,7 +13,6 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import LokSevaAayugLogo from "../loksevaaayug.png";
-import NotFound from "../NoDatafound/NotFound";
 
 const StudentData = () => {
   const { id } = useParams(); // Getting id from the route (URL)
@@ -38,6 +20,8 @@ const StudentData = () => {
   const [studentData, setStudentData] = useState(null); // State to store student data
   const [loading, setLoading] = useState(true); // State to show loading
   const [errorMessage, setErrorMessage] = useState(null); // State to handle errors
+
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     // Fetch student data using the ID
@@ -61,6 +45,15 @@ const StudentData = () => {
     // Call the fetch function
     fetchStudentData();
   }, [id]);
+
+  // Handle Verify Button Click
+  const handleVerify = () => {
+    if (studentData && studentData.image) {
+      navigate("/camera", {
+        state: { studentImage: studentData.image },
+      });
+    }
+  };
 
   return (
     <Stack>
@@ -311,6 +304,7 @@ const StudentData = () => {
                 backgroundColor: "rgb(46 125 50)",
               }}
               size="large"
+              onClick={handleVerify} // Navigate to FaceDetection on click
             >
               Verify
             </Button>

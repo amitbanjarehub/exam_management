@@ -1,53 +1,41 @@
 import React, { useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
-import { useLocation } from "react-router-dom";
 
 const videoConstraints = {
   facingMode: "user", // Use front camera
 };
 
 const FaceDetection = () => {
-  const location = useLocation();
-  const photo1Url = new URLSearchParams(location.search).get("photo1Url"); // Extract photo1Url from query params
-
   const webcamRef = useRef(null);
-  const [photo2, setPhoto2] = useState(null); // Captured image as photo2
+  const [photo1, setPhoto1] = useState(null);
+  const [photo2, setPhoto2] = useState(null);
 
-  // Capture image for photo2
+  // Capture image for photo1 and photo2
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
-    setPhoto2(imageSrc); // Set the captured image
-  }, [webcamRef]);
+    setPhoto1(imageSrc);
+    setPhoto2(imageSrc);
+    // if (!photo1) {
+    //   setPhoto1(imageSrc);
+    // } else {
+    //   setPhoto2(imageSrc);
+    // }
+  }, [webcamRef, photo1, photo2]);
 
-  // Convert base64 to Blob
-  const base64ToBlob = (base64Data, mimeType) => {
-    const byteString = atob(base64Data.split(",")[1]); // Decode base64
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mimeType });
-  };
-
-  // Compare the captured image with the student image from the database
+  // Compare image with API
   const compareWithDatabase = async () => {
-    if (!photo1Url || !photo2) {
-      alert("Please capture the image for comparison!");
+    if (!photo1 || !photo2) {
+      alert("Please capture both images for comparison!");
       return;
     }
 
     try {
-      const blobPhoto2 = base64ToBlob(photo2, "image/jpeg"); // captured image
-
       const formData = new FormData();
-      formData.append("photo2", blobPhoto2, "photo2.jpg");
+      formData.append("photo1", dataURItoBlob(photo1), "photo1.jpg");
+      formData.append("photo2", dataURItoBlob(photo2), "photo2.jpg");
 
-      // Send request with the photo1Url as a query parameter and photo2 in the body
       const response = await fetch(
-        `https://whatsappapi.vertexsuite.in/v1/vs/compareFaces2?photo1Url=${encodeURIComponent(
-          photo1Url
-        )}`,
+        "https://whatsappapi.vertexsuite.in/v1/vs/compareFaces",
         {
           method: "POST",
           body: formData,
@@ -59,6 +47,18 @@ const FaceDetection = () => {
     } catch (error) {
       console.error("Error comparing images:", error);
     }
+  };
+
+  // Helper function to convert base64 image to blob
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
   };
 
   return (
@@ -79,7 +79,7 @@ const FaceDetection = () => {
       {/* Action Buttons */}
       <div style={buttonContainerStyle}>
         <button onClick={capture} style={buttonStyle}>
-          Capture Image for Comparison
+          {photo1 ? "Capture Second Image" : "Capture First Image"}
         </button>
         <button onClick={compareWithDatabase} style={buttonStyle}>
           Compare
@@ -88,16 +88,16 @@ const FaceDetection = () => {
 
       {/* Captured Image Preview */}
       <div style={previewContainerStyle}>
-        {photo1Url && (
+        {photo1 && (
           <div>
-            <h2>Student Image</h2>
-            <img src={photo1Url} alt="Student" style={previewImageStyle} />
+            <h2>First Image</h2>
+            <img src={photo1} alt="First" style={previewImageStyle} />
           </div>
         )}
         {photo2 && (
           <div>
-            <h2>Captured Image</h2>
-            <img src={photo2} alt="Captured" style={previewImageStyle} />
+            <h2>Second Image</h2>
+            <img src={photo2} alt="Second" style={previewImageStyle} />
           </div>
         )}
       </div>
