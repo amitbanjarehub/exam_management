@@ -47,12 +47,13 @@ const LoginCard = () => {
       );
 
       const data = await response.json();
-      
 
       if (response.ok) {
         // localStorage.setItem("token", data.token);
         localStorage.setItem("token", data?.accessToken);
+        // navigate("/dashboard");
         navigate("/management");
+        
       } else {
         setErrorMessage(data.message || "Invalid login credentials");
       }
@@ -115,7 +116,9 @@ const LoginCard = () => {
 
       <Box
         sx={{
-          maxWidth: 400,
+          maxWidth: 600,
+          height: { xl: "620px", lg: "620px" },
+          width: { xl: "420px", lg: "420px" },
           mx: "auto",
           p: 4,
           mt: 5,
@@ -123,6 +126,7 @@ const LoginCard = () => {
           borderRadius: 2,
           marginTop: { lg: "10%", xl: "10%", xs: "124px", sm: "224px" },
           backgroundColor: "white",
+          // border: "1px solid red",
         }}
       >
         <Stack
@@ -131,12 +135,13 @@ const LoginCard = () => {
             justifyContent: "center",
             alignItems: "center",
             paddingBottom: "10px",
+            marginBottom: { xl: "28px", lg: "28px" },
           }}
         >
           <img
             src={LokSevaAayugLogo}
             alt="logo"
-            style={{ height: "80px", width: "80px" }}
+            style={{ height: "100px", width: "100px" }}
           />
         </Stack>
 
@@ -146,7 +151,7 @@ const LoginCard = () => {
           </Typography>
         )}
 
-        <Stack>
+        <Stack sx={{ marginBottom: { xl: "16px", lg: "16px" } }}>
           <Typography
             sx={{
               color: "rgb(100, 116, 139)",
@@ -161,13 +166,19 @@ const LoginCard = () => {
             fullWidth
             sx={{ mb: 3, borderRadius: 2 }}
             placeholder="Enter your email id"
-            size="small"
+            size="medium"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </Stack>
 
-        <Box sx={{ position: "relative", mb: 3 }}>
+        <Box
+          sx={{
+            position: "relative",
+            mb: 3,
+            marginBottom: { xl: "28px", lg: "28px" },
+          }}
+        >
           <Stack>
             <Typography
               sx={{
@@ -184,7 +195,7 @@ const LoginCard = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               sx={{ borderRadius: 2 }}
-              size="small"
+              size="medium"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -203,7 +214,7 @@ const LoginCard = () => {
           </Box>
         </Box>
 
-        <Box sx={{ textAlign: "right", mb: 3 }}>
+        <Box sx={{ textAlign: "right", mb: 3, marginBottom: { xl: "28px", lg: "28px" }, }}>
           <Link href="#" underline="none" sx={{ color: "rgb(8 139 200)" }}>
             Forgot Password?
           </Link>
@@ -225,31 +236,7 @@ const LoginCard = () => {
           Login
         </Button>
 
-        <Typography
-          align="center"
-          variant="body2"
-          sx={{
-            fontSize: { lg: "18px", sm: "16px" },
-            fontWeight: "500",
-            lineHeight: { lg: "28px", sm: "26px" },
-            color: "rgb(148, 163, 184)",
-          }}
-        >
-          Don't have an account yet?{" "}
-          <Link
-            href="#"
-            sx={{
-              color: "rgb(8 139 200)",
-              textDecoration: "none",
-              "&:hover": {
-                textDecoration: "underline",
-                textDecorationColor: "black",
-              },
-            }}
-          >
-            Sign up
-          </Link>
-        </Typography>
+      
       </Box>
     </Stack>
   );
