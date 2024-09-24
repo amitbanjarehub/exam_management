@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Send Image Link via WhatsApp</title>
+    <style>
+      .container {
+        margin-top: 50px;
+        text-align: center;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #25d366;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #128c7e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>WhatsApp Image Link Sender</h1>
+      <button onclick="sendWhatsAppMessage()">Send Image Link</button>
+    </div>
+
+    <script>
+      function sendWhatsAppMessage() {
+        const phoneNumber = "7999309244";
+        const message = `Hello! Check out this image: https://robohash.org/elonmusk.png`;
+
+        // WhatsApp Web URL
+        const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(
+          message
+        )}`;
+
+        // Redirect to WhatsApp with the message
+        window.open(whatsappURL, "_blank");
+      }
+    </script>
+  </body>
+</html>

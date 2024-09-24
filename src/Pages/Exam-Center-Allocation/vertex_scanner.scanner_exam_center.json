@@ -1,0 +1,308 @@
+[{
+  "_id": {
+    "$oid": "66ee9fa8536a13466e8b0294"
+  },
+  "center_id": "acde7930-4f21-4699-87d3-e379fb5f7861",
+  "center_name": "GOVT HS school khamrhiya",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, durg",
+  "seating_capacity_min": 100,
+  "seating_capacity_max": 500,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "durg",
+  "city": "durg",
+  "district": "durg",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "82f68352-547a-4db0-a78e-c5a4659c3b02",
+  "created_at": {
+    "$date": "2024-09-21T10:27:52.028Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-21T10:27:52.028Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14a58d1b8ffa88c685ae6"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c970",
+  "center_name": "GOVT HS school Urla",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, durg",
+  "seating_capacity_min": 150,
+  "seating_capacity_max": 500,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "durg",
+  "city": "bhilai",
+  "district": "durg",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14a7bd1b8ffa88c685ae8"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c870",
+  "center_name": "GOVT HS school bhilai",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, durg",
+  "seating_capacity_min": 200,
+  "seating_capacity_max": 500,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "durg",
+  "city": "bhilai",
+  "district": "durg",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14ad7d1b8ffa88c685aea"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c850",
+  "center_name": "GOVT HS school khamrhiya",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, raipur",
+  "seating_capacity_min": 100,
+  "seating_capacity_max": 500,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "raipur",
+  "city": "kabirdham",
+  "district": "raipur",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14b2fd1b8ffa88c685aec"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c852",
+  "center_name": "GOVT HS school bhudapara",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, raipur",
+  "seating_capacity_min": 80,
+  "seating_capacity_max": 200,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "raipur",
+  "city": "budhapra",
+  "district": "raipur",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14b89d1b8ffa88c685aee"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c854",
+  "center_name": "GOVT HS school devpuri",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, raipur",
+  "seating_capacity_min": 200,
+  "seating_capacity_max": 200,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "raipur",
+  "city": "devpuri",
+  "district": "raipur",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14bc8d1b8ffa88c685af0"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c866",
+  "center_name": "GOVT HS school Bilaspur",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, bilaspur",
+  "seating_capacity_min": 200,
+  "seating_capacity_max": 200,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "bilaspur",
+  "city": "bilasa",
+  "district": "raipur",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14c3cd1b8ffa88c685af2"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c884",
+  "center_name": "GOVT HS school jagannath",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, bilaspur",
+  "seating_capacity_min": 160,
+  "seating_capacity_max": 200,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "bilaspur",
+  "city": "devghat",
+  "district": "bilaspur",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14c51d1b8ffa88c685af4"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c670",
+  "center_name": "GOVT HS school amravti",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, bilaspur",
+  "seating_capacity_min": 80,
+  "seating_capacity_max": 200,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "bilaspur",
+  "city": "dhanbaad",
+  "district": "bilaspur",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14cf9d1b8ffa88c685af6"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04c123",
+  "center_name": "GOVT HS school krma",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, nagpur",
+  "seating_capacity_min": 200,
+  "seating_capacity_max": 200,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "nagpur",
+  "city": "bhnumati",
+  "district": "korba",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f14d4fd1b8ffa88c685af8"
+  },
+  "center_id": "28d54825-cb8f-42f2-92cf-b7d83f04d423",
+  "center_name": "GOVT HS school rampur",
+  "category": "General",
+  "center_status": "Pending",
+  "center_address": "camp1, rampur",
+  "seating_capacity_min": 100,
+  "seating_capacity_max": 200,
+  "alloted_seat": 0,
+  "center_metaData": {},
+  "priority": 0,
+  "division": "nagpur",
+  "city": "reva",
+  "district": "korba",
+  "state": "cg",
+  "is_allocated": false,
+  "criteria_fullfill_percent": 0,
+  "created_by": "d75e0610-6560-468c-b3ad-76fb7c310961",
+  "created_at": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  },
+  "last_modified": {
+    "$date": "2024-09-23T10:58:52.156Z"
+  }
+}]

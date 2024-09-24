@@ -201,6 +201,7 @@ const Management = () => {
         }
 
         const dataLive = await liveData.json();
+        console.log("dataLive555:=======>>>", dataLive);
 
         setStudentsLive(dataLive?.students);
         setLoading(false);

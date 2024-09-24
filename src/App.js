@@ -13,6 +13,7 @@ import CreateExam from "./Pages/Exam-Center-Allocation/AayogAdmin/CreateExam";
 import CreateExamCenter from "./Pages/Exam-Center-Allocation/DistrictAdmin/CreateExamCenter";
 import Layout2 from "./Pages/Exam-Center-Allocation/Layout/Layout";
 import ExamCenterAllocation from "./Pages/Exam-Center-Allocation/AayogDirector/ExamCenterAllocation";
+import ManualAllocation from "./Pages/Exam-Center-Allocation/ExamCenterAllocationFrontend/ManualAllocation ";
 
 const App = () => {
   return (
@@ -61,6 +62,15 @@ const App = () => {
           element={
             <Layout2>
               <ExamCenterAllocation />
+            </Layout2>
+          }
+        />
+
+        <Route
+          path="/manual-allocation"
+          element={
+            <Layout2>
+              <ManualAllocation />
             </Layout2>
           }
         />
