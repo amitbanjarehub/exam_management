@@ -1,0 +1,25 @@
+
+
+
+{
+    "center_name": "ABC Exam Center",
+    "category": "General",
+    "center_status": "active",
+    "center_address": "123 Street, City, State",
+    "seating_capacity_min": 50,
+    "seating_capacity_max": 100,
+    "alloted_seat": 30,
+    "center_metaData": {
+      "type": "exam",
+      "other_details": "This is a test exam center."
+    },
+    "priority": 1,
+    "division": "Central",
+    "city": "Raipur",
+    "district": "Raipur",
+    "state": "Chhattisgarh",
+    "is_allocated": false,
+    "is_verified": true,
+    "criteria_fullfill_percent": 80,
+    "created_by": "admin"
+  }

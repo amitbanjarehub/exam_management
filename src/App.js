@@ -14,6 +14,9 @@ import CreateExamCenter from "./Pages/Exam-Center-Allocation/DistrictAdmin/Creat
 import Layout2 from "./Pages/Exam-Center-Allocation/Layout/Layout";
 import ExamCenterAllocation from "./Pages/Exam-Center-Allocation/AayogDirector/ExamCenterAllocation";
 import ManualAllocation from "./Pages/Exam-Center-Allocation/ExamCenterAllocationFrontend/ManualAllocation ";
+import CalculatingStudentExamCenterRatio from "./Pages/Exam-Center-Allocation/RatioStudentExamCenter/CalulatingStudentExamCenterRatio";
+import ExamCenterForExam from "./Pages/ExamCenterForExam/ExamCenterForExam";
+import ExamManagement from "./Pages/Exam-Center-Allocation/AayogAdmin/ExamManagement ";
 
 const App = () => {
   return (
@@ -71,6 +74,33 @@ const App = () => {
           element={
             <Layout2>
               <ManualAllocation />
+            </Layout2>
+          }
+        />
+
+        <Route
+          path="/examcenter-student-ratio-lsy"
+          element={
+            <Layout2>
+              <CalculatingStudentExamCenterRatio />
+            </Layout2>
+          }
+        />
+
+        <Route
+          path="/examcenter-allocatefor-exam-lsy"
+          element={
+            <Layout2>
+              <ExamCenterForExam />
+            </Layout2>
+          }
+        />
+
+        <Route
+          path="/exam-management-lsy"
+          element={
+            <Layout2>
+              <ExamManagement />
             </Layout2>
           }
         />

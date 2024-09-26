@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   TextField,
@@ -59,7 +58,7 @@ const CreateExam = () => {
 
     fetchExam();
   }, []);
- 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -103,7 +102,7 @@ const CreateExam = () => {
       <Grid item xs={12} md={6}>
         <Card
           variant="outlined"
-          sx={{ height: "100%", width: { xs: "100%", sm: "100%" } }}
+          sx={{ height: "100%", width: { xs: "100%", sm: "100%" }, }}
         >
           <CardContent>
             <Typography variant="h6" gutterBottom>
