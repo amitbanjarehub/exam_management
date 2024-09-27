@@ -100,9 +100,10 @@ const CreateExam = () => {
     <Grid container spacing={3}>
       {/* Left Side: Exam Form */}
       <Grid item xs={12} md={6}>
+        <Typography sx={{ fontSize: "20px" }}>AayogAdmin</Typography>
         <Card
           variant="outlined"
-          sx={{ height: "100%", width: { xs: "100%", sm: "100%" }, }}
+          sx={{ height: "100%", width: { xs: "100%", sm: "100%" } }}
         >
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -179,11 +180,11 @@ const CreateExam = () => {
 
       {/* Right Side: Exam List */}
       <Grid item xs={12} md={6}>
+        <Typography variant="h6" gutterBottom>
+          Exam List
+        </Typography>
         <Card variant="outlined" sx={{ height: "100%" }}>
           <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Exam List
-            </Typography>
             <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
               <Table>
                 <TableHead>

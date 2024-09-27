@@ -21,7 +21,7 @@ function Dashboard() {
       <Sidebar />
 
       {/* Main Content */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" >
         {/* Top Cards */}
         <TopCards />
 

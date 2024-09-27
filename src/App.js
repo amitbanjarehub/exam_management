@@ -17,6 +17,9 @@ import ManualAllocation from "./Pages/Exam-Center-Allocation/ExamCenterAllocatio
 import CalculatingStudentExamCenterRatio from "./Pages/Exam-Center-Allocation/RatioStudentExamCenter/CalulatingStudentExamCenterRatio";
 import ExamCenterForExam from "./Pages/ExamCenterForExam/ExamCenterForExam";
 import ExamManagement from "./Pages/Exam-Center-Allocation/AayogAdmin/ExamManagement ";
+import ExamCenterData from "./Pages/Exam-Center-Allocation/AayogAdmin/ExamCenterData";
+import ExamCenterList from "./Pages/Exam-Center-Allocation/DistrictAdmin/ExamCenterList";
+import CalucateStudCenterCapacity from "./Pages/Exam-Center-Allocation/AayogAdmin/CalucateStudCenterCapacity";
 
 const App = () => {
   return (
@@ -101,6 +104,32 @@ const App = () => {
           element={
             <Layout2>
               <ExamManagement />
+            </Layout2>
+          }
+        />
+
+        <Route
+          path="/exam-centerFecthing"
+          element={
+            <Layout2>
+              <ExamCenterData />
+            </Layout2>
+          }
+        />
+        <Route
+          path="/exam-center-list"
+          element={
+            <Layout2>
+              <ExamCenterList />
+            </Layout2>
+          }
+        />
+
+        <Route
+          path="/calulate-exam-center-with-student-capacity"
+          element={
+            <Layout2>
+              <CalucateStudCenterCapacity />
             </Layout2>
           }
         />

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -17,6 +16,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Typography,
 } from "@mui/material";
 
 const CalculatingStudentExamCenterRatio = () => {
@@ -28,6 +28,7 @@ const CalculatingStudentExamCenterRatio = () => {
   const [centerByDivision, setCenterByDivision] = useState([]);
   const [studentDataByDivision, setStudentDataByDivision] = useState([]);
   const [divisionResults, setDivisionResults] = useState([]); // Store calculation results
+  const [verifiedExamCenters, setVerifiedExamCenters] = useState([]);
 
   const handleShiftChange = (event) => {
     setShift(event.target.value);
@@ -80,12 +81,34 @@ const CalculatingStudentExamCenterRatio = () => {
   // Fetch exam centers
   const fetchExamCenters = async () => {
     try {
-      const response = await axios.get(
-        "https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/examCenter"
-      );
-      const centers = response.data.examCenters;
-      setExamCenters(centers);
-      organizeCentersByDivision(centers); // Organize centers after fetching
+      let currentPage = 1;
+      let totalPages = 1;
+      let allExamCenters = [];
+
+      while (currentPage <= totalPages) {
+        try {
+          // API request for each page
+          const response = await axios.get(
+            `https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/examCenter`,
+            {
+              params: {
+                page: currentPage,
+              },
+            }
+          );
+
+          const { examCenters: centers, totalPages: total } = response.data;
+          allExamCenters = [...allExamCenters, ...centers]; // Collect all centers
+          totalPages = total; // Update total pages
+          currentPage++; // Move to next page
+        } catch (error) {
+          console.error("Error fetching exam center data:", error);
+          break;
+        }
+      }
+
+      setExamCenters(allExamCenters);
+      organizeCentersByDivision(allExamCenters);
     } catch (error) {
       console.error("Error fetching exam centers data:", error);
     }
@@ -93,28 +116,41 @@ const CalculatingStudentExamCenterRatio = () => {
 
   // Organize exam centers by division
   const organizeCentersByDivision = (centers) => {
-    const divisionMap = {};
+    const notAllocatedVerified = centers.reduce((acc, center) => {
+      const {
+        division,
+        center_name,
+        seating_capacity_min,
+        seating_capacity_max,
+        center_status,
+        is_allocated,
+      } = center;
+      const capacity = `${seating_capacity_max}`;
 
-    centers.forEach((center) => {
-      const division = center.division;
+      if (center_status === "verified" && !is_allocated) {
+        const centerData = {
+          center_name: center_name,
+          seating_capacity: seating_capacity_max,
+          status: center_status,
+          is_allocated,
+        };
 
-      if (!divisionMap[division]) {
-        divisionMap[division] = [];
+        const existingDivision = acc.find((item) => item.division === division);
+
+        if (existingDivision) {
+          existingDivision.centers.push(centerData);
+        } else {
+          acc.push({
+            division,
+            centers: [centerData],
+          });
+        }
       }
 
-      divisionMap[division].push({
-        center_name: center.center_name,
-        seating_capacity: center.seating_capacity_max,
-      });
-    });
+      return acc;
+    }, []);
 
-    // Convert the divisionMap into an array of objects
-    const result = Object.keys(divisionMap).map((division) => ({
-      division,
-      centers: divisionMap[division],
-    }));
-
-    setCenterByDivision(result);
+    setCenterByDivision(notAllocatedVerified);
   };
 
   // Fetch students and exam centers on component mount
@@ -122,6 +158,58 @@ const CalculatingStudentExamCenterRatio = () => {
     fetchAllStudents();
     fetchExamCenters();
   }, []);
+
+  // const calculateExamDays = () => {
+  //   // Check if both shift and examDays are selected
+  //   if (!shift || !examDays) {
+  //     alert("Please select both shift and day before calculating.");
+  //     return; // Stop the calculation if either is missing
+  //   }
+  //   console.log("studentDataByDivision12:=============>>", studentDataByDivision);
+  //   const divisionResults = studentDataByDivision.reduce((acc, student) => {
+  //     const { division } = student;
+
+  //     if (!acc[division]) {
+  //       acc[division] = {
+  //         totalStudents: 0,
+  //         totalCapacityPerDay: 0,
+  //         remainingStudents: 0,
+  //         totalCapacity: 0, // For the new column
+  //       };
+  //     }
+
+  //     acc[division].totalStudents += 1;
+
+  //     return acc;
+  //   }, {});
+  //   console.log("centerByDivision12:=============>>", centerByDivision);
+  //   centerByDivision.forEach((divisionData) => {
+  //     const { division, centers } = divisionData;
+
+  //     console.log("division12:===>>", division);
+  //     console.log("centers12:===>>", centers);
+
+  //     if (divisionResults[division]) {
+  //       const totalCapacityPerShift =
+  //         centers.reduce((acc, center) => acc + center.seating_capacity, 0) *
+  //         shift;
+
+  //       // Total capacity for the selected shifts and days
+  //       divisionResults[division].totalCapacityPerDay =
+  //         totalCapacityPerShift * examDays;
+
+  //       divisionResults[division].totalCapacity = totalCapacityPerShift; // Store total capacity for 1 day and selected shifts
+
+  //       const remaining =
+  //         divisionResults[division].totalStudents -
+  //         divisionResults[division].totalCapacityPerDay;
+  //       divisionResults[division].remainingStudents =
+  //         remaining > 0 ? remaining : 0;
+  //     }
+  //   });
+
+  //   setDivisionResults(Object.entries(divisionResults)); // Store the results as an array
+  // };
 
   const calculateExamDays = () => {
     // Check if both shift and examDays are selected
@@ -138,28 +226,30 @@ const CalculatingStudentExamCenterRatio = () => {
           totalStudents: 0,
           totalCapacityPerDay: 0,
           remainingStudents: 0,
-          totalCapacity: 0, // For the new column
+          totalCapacity: 0, // Initialize for total capacity
         };
       }
 
-      acc[division].totalStudents += 1;
+      acc[division].totalStudents += 1; // Count students for each division
 
       return acc;
     }, {});
 
+    // Now calculate capacities based on centers
     centerByDivision.forEach((divisionData) => {
       const { division, centers } = divisionData;
 
       if (divisionResults[division]) {
-        const totalCapacityPerShift =
-          centers.reduce((acc, center) => acc + center.seating_capacity, 0) *
-          shift;
+        // Calculate total capacity per shift
+        const totalCapacityPerShift = centers.reduce((acc, center) => {
+          return acc + center.seating_capacity;
+        }, 0); // Initialize with 0 to avoid NaN
 
-        // Total capacity for the selected shifts and days
+        divisionResults[division].totalCapacity = totalCapacityPerShift; // Store total capacity for 1 day
+
+        // Total capacity for the selected days and shifts
         divisionResults[division].totalCapacityPerDay =
-          totalCapacityPerShift * examDays;
-
-        divisionResults[division].totalCapacity = totalCapacityPerShift; // Store total capacity for 1 day and selected shifts
+          totalCapacityPerShift * examDays * shift;
 
         const remaining =
           divisionResults[division].totalStudents -
@@ -169,15 +259,21 @@ const CalculatingStudentExamCenterRatio = () => {
       }
     });
 
-    setDivisionResults(Object.entries(divisionResults)); // Store the results as an array
+    setDivisionResults(Object.entries(divisionResults)); // Convert to array
   };
 
   if (loading) {
     return <CircularProgress />;
   }
 
+  console.log("examCenters:===========>>>", examCenters);
+  console.log("centerByDivision:=====>>", centerByDivision);
+
   return (
     <Stack spacing={3}>
+      <Typography sx={{ fontSize: "20px" }}>
+        Welcome District Admin !
+      </Typography>
       <h3>Calculating exam center with student capacity</h3>
 
       <Grid container spacing={2}>
@@ -253,7 +349,7 @@ const CalculatingStudentExamCenterRatio = () => {
                   <TableCell>Day</TableCell>
                   <TableCell>Shift</TableCell>
                   <TableCell>
-                    Total Capacity (for 1 day and {shift} shifts)
+                    Total Capacity (for 1 day and 1 shifts)
                   </TableCell>
                   <TableCell>
                     Total Capacity (for {examDays} days and {shift} shifts)

@@ -10,6 +10,7 @@ import {
   TableRow,
   Paper,
   Button,
+  Typography,
 } from "@mui/material";
 
 const rows = [
@@ -53,6 +54,9 @@ const rows = [
 function ExamTable({ onViewClick }) {
   return (
     <TableContainer component={Paper}>
+      <Typography sx={{ fontSize: "20px" }}>
+        Welcome  Admin !
+      </Typography>
       <Table aria-label="exam table">
         <TableHead>
           <TableRow>

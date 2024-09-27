@@ -52,131 +52,137 @@ const ExamCenterAllocation = () => {
   };
 
   return (
-    <Grid container spacing={3}>
-      {/* Register Student List */}
-      <Grid item xs={12} md={6}>
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h6">Register Student List</Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Roll No</TableCell>
-                    <TableCell>Date of Birth</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {dummyStudentList.map((student) => (
-                    <TableRow key={student.id}>
-                      <TableCell>{student.name}</TableCell>
-                      <TableCell>{student.rollNo}</TableCell>
-                      <TableCell>{student.dob}</TableCell>
-                      <TableCell>
-                        <Button variant="contained" color="primary">
-                          View
-                        </Button>
-                      </TableCell>
+    <>
+      <Typography sx={{ fontSize: "20px" }}>AayogDirector</Typography>
+      <Grid container spacing={3}>
+        {/* Register Student List */}
+        {/* <Typography sx={{fontSize: "20px"}}>AayogDirector</Typography> */}
+        <Grid item xs={12} md={6}>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="h6">Register Student List</Typography>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Roll No</TableCell>
+                      <TableCell>Date of Birth</TableCell>
+                      <TableCell>Action</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      {/* Register Exam Center List */}
-      <Grid item xs={12} md={6}>
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h6">Register Exam Center List</Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Center Name</TableCell>
-                    <TableCell>Location</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {dummyCenterList.map((center) => (
-                    <TableRow key={center.id}>
-                      <TableCell>{center.name}</TableCell>
-                      <TableCell>{center.location}</TableCell>
-                      <TableCell>
-                        <Button variant="contained" color="secondary">
-                          View
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      {/* Exam Center Allocation */}
-      <Grid item xs={12}>
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h6">Exam Center Allocating Through Roll No.</Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="Roll No. Start"
-                  type="number"
-                  value={rollNoStart}
-                  onChange={(e) => setRollNoStart(e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="Roll No. End"
-                  type="number"
-                  value={rollNoEnd}
-                  onChange={(e) => setRollNoEnd(e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <FormControl fullWidth>
-                  <Select
-                    value={selectedCenter}
-                    onChange={(e) => setSelectedCenter(e.target.value)}
-                    displayEmpty
-                  >
-                    <MenuItem value="" disabled>
-                      Select Exam Center
-                    </MenuItem>
-                    {dummyCenterList.map((center) => (
-                      <MenuItem key={center.id} value={center.name}>
-                        {center.name}
-                      </MenuItem>
+                  </TableHead>
+                  <TableBody>
+                    {dummyStudentList.map((student) => (
+                      <TableRow key={student.id}>
+                        <TableCell>{student.name}</TableCell>
+                        <TableCell>{student.rollNo}</TableCell>
+                        <TableCell>{student.dob}</TableCell>
+                        <TableCell>
+                          <Button variant="contained" color="primary">
+                            View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Grid>
 
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-              onClick={handleCenterAllocation}
-            >
-              Submit
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Register Exam Center List */}
+        <Grid item xs={12} md={6}>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="h6">Register Exam Center List</Typography>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Center Name</TableCell>
+                      <TableCell>Location</TableCell>
+                      <TableCell>Action</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {dummyCenterList.map((center) => (
+                      <TableRow key={center.id}>
+                        <TableCell>{center.name}</TableCell>
+                        <TableCell>{center.location}</TableCell>
+                        <TableCell>
+                          <Button variant="contained" color="secondary">
+                            View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Exam Center Allocation */}
+        <Grid item xs={12}>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="h6">
+                Exam Center Allocating Through Roll No.
+              </Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    label="Roll No. Start"
+                    type="number"
+                    value={rollNoStart}
+                    onChange={(e) => setRollNoStart(e.target.value)}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    label="Roll No. End"
+                    type="number"
+                    value={rollNoEnd}
+                    onChange={(e) => setRollNoEnd(e.target.value)}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={selectedCenter}
+                      onChange={(e) => setSelectedCenter(e.target.value)}
+                      displayEmpty
+                    >
+                      <MenuItem value="" disabled>
+                        Select Exam Center
+                      </MenuItem>
+                      {dummyCenterList.map((center) => (
+                        <MenuItem key={center.id} value={center.name}>
+                          {center.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+                onClick={handleCenterAllocation}
+              >
+                Submit
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
