@@ -51,8 +51,8 @@ const LoginCard = () => {
       if (response.ok) {
         // localStorage.setItem("token", data.token);
         localStorage.setItem("token", data?.accessToken);
-        navigate("/dashboard");
-        // navigate("/management");
+        // navigate("/dashboard");
+        navigate("/management");
         
       } else {
         setErrorMessage(data.message || "Invalid login credentials");

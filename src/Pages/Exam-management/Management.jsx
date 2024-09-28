@@ -165,6 +165,12 @@ const Management = () => {
 
   // Handle Verify Button Click
   const handleVerify = (id, image, rollno, status) => {
+    console.log(
+      "id,  status:============>>",
+      id,     
+      status
+    );
+
     // if (id && image && rollno) {
     //   navigate("/camera", {
     //     state: { studentImage: image, studentId: id, studentRollno: rollno },
@@ -334,15 +340,15 @@ const Management = () => {
             </Button>
 
             <Button
-              onClick={() => setFilterStatus("Present")}
+              onClick={() => setFilterStatus("present")}
               sx={{
                 flex: 1,
                 backgroundColor:
-                  filterStatus === "Present" ? "#2E7D32" : "transparent",
-                color: filterStatus === "Present" ? "white" : "black",
+                  filterStatus === "present" ? "#2E7D32" : "transparent",
+                color: filterStatus === "present" ? "white" : "black",
                 "&:hover": {
                   backgroundColor:
-                    filterStatus === "Present" ? "#2E7D32" : "lightgray",
+                    filterStatus === "present" ? "#2E7D32" : "lightgray",
                 },
               }}
             >
@@ -583,6 +589,7 @@ const Management = () => {
                   </Stack>
                   {expandedCard === row._id && (
                     <CardActions>
+                    {  console.log("row:---------->>>", row.studentId)}
                       <Button
                         variant="contained"
                         fullWidth

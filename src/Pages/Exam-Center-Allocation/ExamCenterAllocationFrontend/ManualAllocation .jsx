@@ -252,7 +252,7 @@ const AllocateExamCenters = () => {
           ) {
             center.allotedSeats[currentShift]++;
             allocatedStudents.push({
-              StudentId: student.StudentId,
+              studentId: student.studentId,
               rollNo: student.rollNo,
               name: student.name,
               shift: shifts[shiftIndex],
@@ -346,7 +346,7 @@ const AllocateExamCenters = () => {
               <TableBody>
                 {allocatedData.map((student, index) => (
                   <TableRow key={index}>
-                    <TableCell>{student.StudentId}</TableCell>
+                    <TableCell>{student.studentId}</TableCell>
                     <TableCell>{student.rollNo}</TableCell>
                     <TableCell>{student.name}</TableCell>
                     <TableCell>{student.shift}</TableCell>

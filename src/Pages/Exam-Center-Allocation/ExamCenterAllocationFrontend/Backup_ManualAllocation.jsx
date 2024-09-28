@@ -85,7 +85,7 @@ const AllocateExamCenters = () => {
           ) {
             center.allotedSeats[currentShift]++;
             allocatedStudents.push({
-              StudentId: student.StudentId,
+              studentId: student.studentId,
               rollNo: student.rollNo,
               name: student.name,
               shift: shifts[shiftIndex],

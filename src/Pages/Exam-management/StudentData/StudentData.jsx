@@ -29,10 +29,13 @@ const StudentData = () => {
         const response = await fetch(
           `https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/students/${id}`
         );
+        console.log("response123:============>>>", response);
         if (!response.ok) {
           throw new Error("Student data not found....!");
         }
         const data = await response.json();
+        console.log("data:===========>>>", data);
+
         setStudentData(data.student);
         setLoading(false);
       } catch (error) {
@@ -62,7 +65,7 @@ const StudentData = () => {
     } else {
       // If status is "Present", show an alert
       alert("Student is already verified.");
-       navigate("/management");
+      navigate("/management");
     }
   };
 
