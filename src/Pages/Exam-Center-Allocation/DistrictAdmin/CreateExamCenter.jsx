@@ -18,7 +18,16 @@ import {
   FormControl,
   InputLabel,
   Stack,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
+import ExamCenterLists from "./ExamCenterLists";
+import { FaFileUpload } from "react-icons/fa";
 
 const CreateExamCenter = () => {
   const [centerData, setCenterData] = useState({
@@ -45,7 +54,10 @@ const CreateExamCenter = () => {
   });
 
   const [examCenters, setExamCenters] = useState([]); // State for storing API data
-
+  const [checkedCriteria, setCheckedCriteria] = useState({
+    non_religious_area: false,
+    alcohol_free_zone: false,
+  });
   // Fetch data from API
   useEffect(() => {
     const fetchExamCenter = async () => {
@@ -81,6 +93,11 @@ const CreateExamCenter = () => {
     });
   };
 
+  const handleCriteriaChange = (e) => {
+    const { name, checked } = e.target;
+    setCheckedCriteria({ ...checkedCriteria, [name]: checked });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -102,6 +119,8 @@ const CreateExamCenter = () => {
         city: centerData.city,
         district: centerData.district,
         state: centerData.state,
+        non_religious_area: checkedCriteria.non_religious_area, // Include checkbox value
+        alcohol_free_zone: checkedCriteria.alcohol_free_zone, // Include checkbox value
         is_allocated: centerData.is_allocated,
         is_verified: centerData.is_verified,
         criteria_fullfill_percent: centerData.criteria_fullfill_percent,
@@ -133,6 +152,58 @@ const CreateExamCenter = () => {
     alert(`Delete center with ID: ${id}`);
   };
 
+  //csv file upload function
+
+  const [open, setOpen] = useState(false); // To control modal
+  const [selectedFile, setSelectedFile] = useState(null); // To store the selected file
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // Handle file selection
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]); // Storing the selected file
+  };
+
+  // Function to handle file upload (sending it to the database)
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      alert("Please select a file first!");
+      return;
+    }
+
+    // Create FormData object and append the file
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch(
+        "https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/examCenter/upload",
+        {
+          method: "POST",
+          body: formData, // Send formData, not JSON
+        }
+      );
+
+      if (response.ok) {
+        alert("File uploaded successfully!");
+      } else {
+        // Backend se milne wale error message ko fetch karenge
+        const errorData = await response.json();
+        alert(`Error uploading file: ${errorData.message || "Upload failed"}`);
+      }
+    } catch (err) {
+      alert(`Error uploading file: ${err.message}`);
+    }
+
+    setOpen(false); // Close the modal after file upload
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Typography sx={{ fontSize: "40px", marginBottom: "20px" }}>
@@ -143,12 +214,48 @@ const CreateExamCenter = () => {
 
         <Grid item xs={12} md={6}>
           <Card variant="outlined">
+            <Stack
+              sx={{
+                justifyContent: "space-between",
+                // border: "1px solid blue",
+                display: "flex",
+                flexDirection: "row",
+                paddingTop: "16px",
+                paddingRight: "12px",
+              }}
+            >
+              <Typography
+                variant="h6"
+                gutterBottom
+                sx={{ marginBottom: "12px", marginLeft: "16px" }}
+              >
+                Upload Exam Center CSV File
+              </Typography>
+              <Button
+                variant="outlined"
+                startIcon={<FaFileUpload />} // This works with Button
+                onClick={handleClickOpen}
+                sx={{
+                  // border: "1px solid red",
+                  lineHeight: "16px",
+                  width: "200px",
+                  // Ensures icon and text align to the right
+                }}
+              >
+                Upload csv file
+              </Button>
+            </Stack>
+
             <CardContent>
-              <Typography variant="h6" gutterBottom>
+              <Typography
+                variant="h6"
+                gutterBottom
+                sx={{ marginBottom: "12px" }}
+              >
                 Exam Center Form
               </Typography>
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginBottom: "12px" }}>
                 {/* Center Name */}
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -179,7 +286,7 @@ const CreateExamCenter = () => {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginBottom: "12px" }}>
                 {/* Center Address */}
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -205,7 +312,7 @@ const CreateExamCenter = () => {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginBottom: "12px" }}>
                 {/* Seating Capacity Max */}
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -231,11 +338,15 @@ const CreateExamCenter = () => {
               </Grid>
 
               {/* Metadata Fields */}
-              <Typography variant="h6" gutterBottom>
+              <Typography
+                variant="h6"
+                gutterBottom
+                sx={{ marginBottom: "12px" }}
+              >
                 Center MetaData
               </Typography>
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginBottom: "12px" }}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="Priority"
@@ -257,7 +368,7 @@ const CreateExamCenter = () => {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginBottom: "12px" }}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="City"
@@ -279,7 +390,7 @@ const CreateExamCenter = () => {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ marginBottom: "12px" }}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="State"
@@ -287,6 +398,37 @@ const CreateExamCenter = () => {
                     value={centerData.state}
                     onChange={handleInputChange}
                     fullWidth
+                  />
+                </Grid>
+              </Grid>
+
+              <Typography variant="h6" gutterBottom>
+                Criteria
+              </Typography>
+              {/* Criteria Section with 5 Checkboxes */}
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checkedCriteria.non_religious_area}
+                        onChange={handleCriteriaChange}
+                        name="non_religious_area"
+                      />
+                    }
+                    label="Non-religious area under 500 meter"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checkedCriteria.alcohol_free_zone}
+                        onChange={handleCriteriaChange}
+                        name="alcohol_free_zone"
+                      />
+                    }
+                    label="Alcohol-free zone under 500 meter"
                   />
                 </Grid>
               </Grid>
@@ -305,372 +447,37 @@ const CreateExamCenter = () => {
 
         {/* Right Side: Exam Center List */}
         <Grid item xs={12} md={6}>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Exam Center List
-              </Typography>
-              <Stack
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                }}
-              >
-                {/* Search Bar */}
-                <TextField
-                  label="Search by Exam Center"
-                  variant="outlined"
-                  fullWidth
-                  // value={searchQuery}
-                  // onChange={handleSearchChange}
-                  sx={{ marginBottom: "16px", width: "49%" }}
-                />
-
-                {/* Filter Dropdown */}
-                <FormControl
-                  fullWidth
-                  sx={{ marginBottom: "16px", width: "49%" }}
-                >
-                  <InputLabel id="status-filter-label">
-                    Filter by Status
-                  </InputLabel>
-                  <Select
-                    labelId="status-filter-label"
-                    // value={filterStatus}
-                    // onChange={handleFilterChange}
-                    label="Filter by Status"
-                  >
-                    <MenuItem value="">All</MenuItem>
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="inactive">Inactive</MenuItem>
-                  </Select>
-                </FormControl>
-              </Stack>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Center Name</TableCell>
-                      <TableCell>Category</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Seats (Min/Max)</TableCell>
-                      <TableCell>Action</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {examCenters.map((center) => (
-                      <TableRow key={center._id}>
-                        <TableCell>{center.center_name}</TableCell>
-                        <TableCell>{center.category}</TableCell>
-                        <TableCell>{center.center_status}</TableCell>
-                        <TableCell>
-                          {center.seating_capacity_min} /{" "}
-                          {center.seating_capacity_max}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => handleDelete(center._id)}
-                          >
-                            Delete
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
+          <Card variant="outlined" sx={{ width: "100%" }}>
+            <ExamCenterLists />
           </Card>
         </Grid>
       </Grid>
+
+      {/* Modal for uploading the CSV file */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Upload CSV File</DialogTitle>
+        <DialogContent>
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleFileChange}
+            style={{ marginBottom: "20px" }}
+          />
+          {selectedFile && (
+            <Typography>Selected File: {selectedFile.name}</Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleFileUpload} color="primary">
+            Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
     </form>
   );
 };
 
 export default CreateExamCenter;
-
-// import React, { useEffect, useState } from "react";
-// import {
-//   TextField,
-//   Button,
-//   Grid,
-//   Typography,
-//   Card,
-//   CardContent,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Paper,
-//   Select,
-//   MenuItem,
-//   FormControl,
-//   InputLabel,
-// } from "@mui/material";
-
-// const CreateExamCenter = () => {
-//   const [centerData, setCenterData] = useState({
-//     center_name: "",
-//     category: "",
-//     center_status: "Pending", // default value
-//     center_address: "",
-//     seating_capacity_min: "",
-//     seating_capacity_max: "",
-//     alloted_seat: 0, // fixed value
-//     center_metaData: {
-//       priority: 0,
-//       division: "",
-//       city: "",
-//       district: "",
-//       state: "",
-//       is_allocated: false, // default value
-//       criteria_fullfill_percent: 0,
-//     },
-//   });
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const [examCenters, setExamCenters] = useState([]); // State for storing API data
-
-//   // Fetch data from API
-//   useEffect(() => {
-//     const fetchExamCenter = async () => {
-//       try {
-//         const liveData = await fetch(
-//           "https://fi26pmpfb5.execute-api.ap-south-1.amazonaws.com/dev/v1/examCenter"
-//         );
-
-//         if (!liveData.ok) {
-//           throw new Error(`Error: ${liveData.status}`);
-//         }
-
-//         const dataLive = await liveData.json();
-//         setExamCenters(dataLive?.examCenters);
-
-//       } catch (err) {
-//         setError(err.message);
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchExamCenter();
-//   }, []);
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setCenterData({ ...centerData, [name]: value });
-//   };
-
-//   const handleMetaDataChange = (e) => {
-//     const { name, value } = e.target;
-//     setCenterData({
-//       ...centerData,
-//       center_metaData: { ...centerData.center_metaData, [name]: value },
-//     });
-//   };
-
-//   const handleDelete = (id) => {
-//     alert(`Delete center with ID: ${id}`);
-//   };
-
-//   return (
-//     <Grid container spacing={3}>
-//       {/* Left Side: Exam Center Form */}
-//       <Grid item xs={12} md={6}>
-//         <Card variant="outlined">
-//           <CardContent>
-//             <Typography variant="h6" gutterBottom>
-//               Exam Center Form
-//             </Typography>
-
-//             <Grid container spacing={2}>
-//               {/* Center Name */}
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="Center Name"
-//                   name="center_name"
-//                   onChange={handleInputChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-
-//               {/* Category */}
-//               <Grid item xs={12} sm={6}>
-//                 <FormControl fullWidth>
-//                   <InputLabel>Category</InputLabel>
-//                   <Select
-//                     name="category"
-//                     value={centerData.category}
-//                     onChange={handleInputChange}
-//                   >
-//                     <MenuItem value="General">General</MenuItem>
-//                     <MenuItem value="OBC">OBC</MenuItem>
-//                     <MenuItem value="SC">SC</MenuItem>
-//                     <MenuItem value="ST">ST</MenuItem>
-//                   </Select>
-//                 </FormControl>
-//               </Grid>
-//             </Grid>
-
-//             <Grid container spacing={2}>
-//               {/* Center Address */}
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="Center Address"
-//                   name="center_address"
-//                   onChange={handleInputChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-
-//               {/* Seating Capacity Min */}
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="Seating Capacity (Min)"
-//                   name="seating_capacity_min"
-//                   onChange={handleInputChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-//             </Grid>
-
-//             <Grid container spacing={2}>
-//               {/* Seating Capacity Max */}
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="Seating Capacity (Max)"
-//                   name="seating_capacity_max"
-//                   onChange={handleInputChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-
-//               {/* Center Status (Fixed as "Pending") */}
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="Center Status"
-//                   name="center_status"
-//                   value={centerData.center_status}
-//                   fullWidth
-//                   disabled
-//                 />
-//               </Grid>
-//             </Grid>
-
-//             {/* Metadata Fields */}
-//             <Typography variant="h6" gutterBottom>
-//               Center MetaData
-//             </Typography>
-
-//             <Grid container spacing={2}>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="Priority"
-//                   name="priority"
-//                   onChange={handleMetaDataChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="Division"
-//                   name="division"
-//                   onChange={handleMetaDataChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-//             </Grid>
-
-//             <Grid container spacing={2}>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="City"
-//                   name="city"
-//                   onChange={handleMetaDataChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="District"
-//                   name="district"
-//                   onChange={handleMetaDataChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-//             </Grid>
-
-//             <Grid container spacing={2}>
-//               <Grid item xs={12} sm={6}>
-//                 <TextField
-//                   label="State"
-//                   name="state"
-//                   onChange={handleMetaDataChange}
-//                   fullWidth
-//                 />
-//               </Grid>
-//             </Grid>
-
-//             <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-//               Submit
-//             </Button>
-//           </CardContent>
-//         </Card>
-//       </Grid>
-
-//       {/* Right Side: Exam Center List */}
-//       <Grid item xs={12} md={6}>
-//         <Card variant="outlined">
-//           <CardContent>
-//             <Typography variant="h6" gutterBottom>
-//               Exam Center List
-//             </Typography>
-//             <TableContainer component={Paper}>
-//               <Table>
-//                 <TableHead>
-//                   <TableRow>
-//                     <TableCell>Center Name</TableCell>
-//                     <TableCell>Category</TableCell>
-//                     <TableCell>Status</TableCell>
-//                     <TableCell>Seats (Min/Max)</TableCell>
-//                     <TableCell>Action</TableCell>
-//                   </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                   {examCenters.map((center) => (
-//                     <TableRow key={center._id}>
-//                       <TableCell>{center.center_name}</TableCell>
-//                       <TableCell>{center.category}</TableCell>
-//                       <TableCell>{center.center_status}</TableCell>
-//                       <TableCell>
-//                         {center.seating_capacity_min} /{" "}
-//                         {center.seating_capacity_max}
-//                       </TableCell>
-//                       <TableCell>
-//                         <Button
-//                           variant="contained"
-//                           color="secondary"
-//                           onClick={() => handleDelete(center._id)}
-//                         >
-//                           Delete
-//                         </Button>
-//                       </TableCell>
-//                     </TableRow>
-//                   ))}
-//                 </TableBody>
-//               </Table>
-//             </TableContainer>
-//           </CardContent>
-//         </Card>
-//       </Grid>
-//     </Grid>
-//   );
-// };
-
-// export default CreateExamCenter;

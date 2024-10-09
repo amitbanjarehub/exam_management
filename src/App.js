@@ -21,6 +21,7 @@ import ExamCenterData from "./Pages/Exam-Center-Allocation/AayogAdmin/ExamCenter
 import ExamCenterList from "./Pages/Exam-Center-Allocation/DistrictAdmin/ExamCenterList";
 import CalucateStudCenterCapacity from "./Pages/Exam-Center-Allocation/AayogAdmin/CalucateStudCenterCapacity";
 
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/student-data/:id" element={<StudentData />} />
         <Route path="/studentdata" element={<StudentData />} />
         <Route path="/student_details" element={<Student_details />} />
+        
         {/* <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-exam" element={<CreateExam />} />
         <Route path="/create-exam-center" element={<CreateExamCenter />} /> */}

@@ -53,7 +53,6 @@ const LoginCard = () => {
         localStorage.setItem("token", data?.accessToken);
         // navigate("/dashboard");
         navigate("/management");
-        
       } else {
         setErrorMessage(data.message || "Invalid login credentials");
       }
@@ -214,7 +213,13 @@ const LoginCard = () => {
           </Box>
         </Box>
 
-        <Box sx={{ textAlign: "right", mb: 3, marginBottom: { xl: "28px", lg: "28px" }, }}>
+        <Box
+          sx={{
+            textAlign: "right",
+            mb: 3,
+            marginBottom: { xl: "28px", lg: "28px" },
+          }}
+        >
           <Link href="#" underline="none" sx={{ color: "rgb(8 139 200)" }}>
             Forgot Password?
           </Link>
@@ -235,8 +240,6 @@ const LoginCard = () => {
         >
           Login
         </Button>
-
-      
       </Box>
     </Stack>
   );
